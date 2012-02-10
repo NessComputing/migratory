@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.nesscomputing</groupId>
+    <artifactId>ness-oss-parent</artifactId>
+    <version>4</version>
+  </parent>
+
+  <groupId>com.nesscomputing.migratory</groupId>
+  <artifactId>migratory-parent</artifactId>
+  <version>3.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+
+  <scm>
+    <connection>scm:git:git://github.com/NessComputing/migratory.git</connection>
+    <developerConnection>scm:git:git@github.com:NessComputing/migratory.git</developerConnection>
+    <url>http://github.com/NessComputing/migratory</url>
+  </scm>
+
+  <modules>
+    <module>migratory-core</module>
+    <module>migratory-maven-plugin</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- project -->
+      <dependency>
+        <groupId>com.nesscomputing.migratory</groupId>
+        <artifactId>migratory-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.nesscomputing.mojo</groupId>
+        <artifactId>maven-migratory-plugin</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <!-- 3rd party -->
+      <dependency>
+        <groupId>org.jdbi</groupId>
+        <artifactId>jdbi</artifactId>
+        <version>2.30</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.antlr</groupId>
+        <artifactId>stringtemplate</artifactId>
+        <version>3.2.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.16</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.pyx4j</groupId>
+        <artifactId>maven-plugin-log4j</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jgrapht</groupId>
+        <artifactId>jgrapht-jdk1.5</artifactId>
+        <version>0.7.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.6.4</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.0.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>4.0.1</version>
+      </dependency>
+
+      <!-- database drivers -->
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>1.3.163</version>
+      </dependency>
+
+      <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.1-901-1.jdbc4</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-maven-plugin</artifactId>
+          <version>1.3.8</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>descriptor</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
