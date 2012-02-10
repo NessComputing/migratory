@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.nesscomputing.migratory</groupId>
     <artifactId>migratory-parent</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.nesscomputing.mojo</groupId>
   <artifactId>maven-migratory-plugin</artifactId>
