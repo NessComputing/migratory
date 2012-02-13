@@ -22,10 +22,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.nesscomputing.migratory.MigratoryException;
-import com.nesscomputing.migratory.information.DefaultMigrationInformationStrategy;
-import com.nesscomputing.migratory.information.MigrationInformation;
-import com.nesscomputing.migratory.information.MigrationInformationStrategy;
+import com.nesscomputing.testing.lessio.AllowLocalFileAccess;
 
+@AllowLocalFileAccess(paths="%TMP_DIR%")
 public class TestDefaultMigrationInformationStrategy
 {
     private final MigrationInformationStrategy strategy = new DefaultMigrationInformationStrategy();

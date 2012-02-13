@@ -12,6 +12,11 @@
   <name>${project.artifactId}</name>
 
   <dependencies>
+    <dependency>
+      <groupId>com.nesscomputing.components</groupId>
+      <artifactId>ness-tinyhttp</artifactId>
+    </dependency>
+
     <!-- 3rd party -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -31,6 +36,11 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
     </dependency>
 
     <dependency>
@@ -57,11 +67,6 @@
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
     </dependency>
 
     <dependency>
@@ -120,16 +125,4 @@
     </dependency>
 
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>${basedir}/../src/ness/LICENSE-HEADER.txt</header>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

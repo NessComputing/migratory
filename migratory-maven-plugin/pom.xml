@@ -86,13 +86,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>${basedir}/../src/ness/LICENSE-HEADER.txt</header>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
       </plugin>

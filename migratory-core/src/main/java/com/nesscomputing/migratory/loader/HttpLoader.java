@@ -18,19 +18,21 @@ package com.nesscomputing.migratory.loader;
 
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.lang3.StringUtils;
+import org.skife.config.CommonsConfigSource;
+import org.skife.config.ConfigurationObjectFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.nesscomputing.migratory.MigratoryConfig;
-import com.nesscomputing.migratory.loader.http.HttpFetcher;
-import com.nesscomputing.migratory.loader.http.StringConverter;
+import com.nesscomputing.tinyhttp.HttpFetcher;
+import com.nesscomputing.tinyhttp.ssl.SSLConfig;
 
 /**
  * Loads arbitrary files from a http: or https: URI.
@@ -39,16 +41,16 @@ public class HttpLoader implements MigrationLoader
 {
     private static final Logger LOG = LoggerFactory.getLogger(HttpLoader.class);
 
-
     private final MigratoryConfig migratoryConfig;
-    private final StringConverter contentConverter;
     private final HttpFetcher httpFetcher;
 
     public HttpLoader(final MigratoryConfig migratoryConfig)
     {
         this.migratoryConfig = migratoryConfig;
-        this.httpFetcher = new HttpFetcher();
-        this.contentConverter = new StringConverter(Charset.forName(migratoryConfig.getEncoding()));
+
+        final ConfigurationObjectFactory objectFactory = new ConfigurationObjectFactory(new CommonsConfigSource(new SystemConfiguration().subset("config")));
+        final SSLConfig sslConfig = objectFactory.build(SSLConfig.class);
+        this.httpFetcher = new HttpFetcher(sslConfig);
     }
 
     @Override
@@ -62,7 +64,8 @@ public class HttpLoader implements MigrationLoader
     {
         LOG.trace("Trying to load '%s'...", fileUri);
         try {
-            final String result = httpFetcher.get(fileUri, migratoryConfig.getHttpLogin(), migratoryConfig.getHttpPassword(), contentConverter);
+
+            final String result = httpFetcher.get(fileUri, migratoryConfig.getHttpLogin(), migratoryConfig.getHttpPassword(), UTF8StringContentConverter.DEFAULT_CONVERTER);
 
             if (result != null) {
                 LOG.trace("... succeeded");
