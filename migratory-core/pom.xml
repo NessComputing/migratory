@@ -11,6 +11,10 @@
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
 
+  <properties>
+    <ness.root.dir>${project.parent.basedir}</ness.root.dir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.nesscomputing.components</groupId>
