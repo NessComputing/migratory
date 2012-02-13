@@ -35,7 +35,7 @@
 
       <dependency>
         <groupId>com.nesscomputing.mojo</groupId>
-        <artifactId>maven-migratory-plugin</artifactId>
+        <artifactId>migratory-maven-plugin</artifactId>
         <version>${project.version}</version>
       </dependency>
 

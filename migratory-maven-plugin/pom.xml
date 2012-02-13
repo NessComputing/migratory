@@ -6,7 +6,7 @@
     <version>3.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.nesscomputing.mojo</groupId>
-  <artifactId>maven-migratory-plugin</artifactId>
+  <artifactId>migratory-maven-plugin</artifactId>
 
   <packaging>maven-plugin</packaging>
   <name>${project.artifactId}</name>
