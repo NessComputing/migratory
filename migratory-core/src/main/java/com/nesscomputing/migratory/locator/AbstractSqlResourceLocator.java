@@ -55,7 +55,7 @@ public abstract class AbstractSqlResourceLocator implements MigrationLocator
             final Collection<URI> uris = loaderManager.loadFolder(baseUri, baseInformation.getValue());
 
             if (uris == null) {
-                throw new MigratoryException(Reason.INTERNAL, "Could not load the metadata migrations!");
+                throw new MigratoryException(Reason.INTERNAL, "Could not load the metadata migrations from '" + baseUri + "' !");
             }
 
             for (final URI uri : uris) {
