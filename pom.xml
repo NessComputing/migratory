@@ -22,6 +22,7 @@
   <modules>
     <module>migratory-core</module>
     <module>migratory-maven-plugin</module>
+    <module>maven-database-plugin</module>
   </modules>
 
   <dependencyManagement>
