@@ -26,6 +26,8 @@ import com.nesscomputing.migratory.StatusResult;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Maven goal that shows the status (current version) of the database.
  *
@@ -45,7 +47,8 @@ public class StatusMojo extends AbstractMigratoryMojo
     /**
      * @parameter expression="${personalities}"
      */
-    protected String personalities;
+    @SuppressFBWarnings("UWF_NULL_FIELD")
+    protected String personalities = null;
 
     @Override
     protected void doExecute(final Migratory migratory) throws Exception

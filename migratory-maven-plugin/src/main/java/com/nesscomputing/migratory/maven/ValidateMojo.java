@@ -24,6 +24,8 @@ import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultProblem;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Maven goal to validate the applied migrations in the database against the available classpath migrations in order to
  * detect accidental migration changes.
@@ -42,7 +44,8 @@ public class ValidateMojo extends AbstractMigratoryMojo
     /**
      * @parameter expression="${personalities}"
      */
-    protected String personalities;
+    @SuppressFBWarnings("UWF_NULL_FIELD")
+    protected String personalities = null;
 
     @Override
     protected void doExecute(final Migratory migratory) throws Exception

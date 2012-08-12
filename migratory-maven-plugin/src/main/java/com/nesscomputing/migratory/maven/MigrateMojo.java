@@ -35,6 +35,8 @@ import com.nesscomputing.migratory.locator.AbstractSqlResourceLocator;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlan;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 
 /**
  * Maven goal that triggers the migration of the configured database to the latest version.
@@ -51,18 +53,21 @@ public class MigrateMojo extends AbstractMigratoryMojo
      * @parameter expression="${migrations}"
      * @required
      */
-    protected String migrations;
+    @SuppressFBWarnings("UWF_NULL_FIELD")
+    protected String migrations = null;
 
     /**
      * @parameter expression="${location.url}"
      * @required
      */
-    protected URL locationUrl;
+    @SuppressFBWarnings({"UWF_NULL_FIELD", "NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD"})
+    protected URL locationUrl = null;
 
     /**
      * @parameter expression="${verbose}"
      */
-    public boolean verbose = false;
+    @SuppressFBWarnings("UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD")
+    protected boolean verbose = false;
 
 
     @Override

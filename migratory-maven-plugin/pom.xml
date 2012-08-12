@@ -82,6 +82,11 @@
       <artifactId>maven-plugin-api</artifactId>
       <version>${version.maven}</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.testing</groupId>
+      <artifactId>findbugs-annotations</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -94,10 +99,10 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
         <configuration>
-          <failOnError>false</failOnError>
-          <effort>Default</effort>
+          <excludeFilterFile>${project.basedir}/src/tools/findbugsExclude.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>

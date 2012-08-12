@@ -27,6 +27,8 @@ import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Maven goal that shows the history (all applied migrations) of the database.
  *
@@ -56,12 +58,13 @@ public class HistoryMojo extends AbstractMigratoryMojo
     /**
      * @parameter expression="${verbose}"
      */
-    protected boolean verbose = false;
+    private boolean verbose = false;
 
     /**
      * @parameter expression="${personalities}"
      */
-    protected String personalities = null;
+    @SuppressFBWarnings("UWF_NULL_FIELD")
+    private String personalities = null;
 
     @Override
     protected void doExecute(Migratory migratory) throws Exception
