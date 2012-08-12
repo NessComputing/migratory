@@ -19,6 +19,9 @@ package com.nesscomputing.migratory.maven;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.validation.ValidationResult;
@@ -34,6 +37,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class ValidateMojo extends AbstractMigratoryMojo
 {
+    private static final Logger LOG = LoggerFactory.getLogger(ValidateMojo.class);
+
     private static final FormatInfo SHORT = new FormatInfo(
         "+---------------------+--------------------+--------------------------------+",
         "| %-40s | %-30s |\n",
@@ -66,20 +71,19 @@ public class ValidateMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = SHORT;
 
-        System.out.println(formatInfo.getFrame());
-        System.out.printf(formatInfo.getName(), personality, result.getValidationStatus());
-        System.out.println(formatInfo.getFrame());
+        LOG.info(formatInfo.getFrame());
+        LOG.info(String.format(formatInfo.getName(), personality, result.getValidationStatus()));
+        LOG.info(formatInfo.getFrame());
         final List<ValidationResultProblem> problems = result.getProblems();
         if (!problems.isEmpty()) {
-            System.out.println(formatInfo.getHeader());
-            System.out.println(formatInfo.getFrame());
+            LOG.info(formatInfo.getHeader());
+            LOG.info(formatInfo.getFrame());
             for (ValidationResultProblem problem: problems) {
-                System.out.printf(formatInfo.getFormat(),
-                                  problem.getValidationStatus(),
-                                  problem.getReason());
-                System.out.println(formatInfo.getFrame());
+                LOG.info(formatInfo.getFormat(),
+                         problem.getValidationStatus(),
+                         problem.getReason());
+                LOG.info(formatInfo.getFrame());
             }
         }
-        System.out.println();
     }
 }
