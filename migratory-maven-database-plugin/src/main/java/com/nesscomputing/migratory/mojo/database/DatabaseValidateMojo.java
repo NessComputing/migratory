@@ -23,9 +23,9 @@ import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultP
  * @requiresProject false
  * @goal validate
  */
-public class ValidateMojo extends AbstractDatabaseMojo
+public class DatabaseValidateMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ValidateMojo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseValidateMojo.class);
 
     /**
      * @parameter expression="${databases}" default-value="all"

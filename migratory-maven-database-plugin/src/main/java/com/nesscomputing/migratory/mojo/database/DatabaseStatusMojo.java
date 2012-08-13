@@ -1,35 +1,32 @@
 package com.nesscomputing.migratory.mojo.database;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
-import com.nesscomputing.migratory.metadata.MetadataInfo;
+import com.nesscomputing.migratory.StatusResult;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
 import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
 
 
 /**
- * Maven goal to report the migration history of the databases.
+ * Maven goal to report the status of the databases.
  *
  * @aggregator true
  * @requiresProject false
- * @goal history
+ * @goal status
  */
-public class HistoryMojo extends AbstractDatabaseMojo
+public class DatabaseStatusMojo extends AbstractDatabaseMojo
 {
     private static final Logger CONSOLE = LoggerFactory.getLogger("console");
-
-    private static final DateTimeFormatter DATE_FORMAT = ISODateTimeFormat.dateHourMinuteSecond();
 
     /**
      * @parameter expression="${databases}" default-value="all"
@@ -41,7 +38,7 @@ public class HistoryMojo extends AbstractDatabaseMojo
     {
         final List<String> databaseList = expandDatabaseList(databases);
 
-        final boolean permission = config.getBoolean(getPropertyName("permission.history-db"), true);
+        final boolean permission = config.getBoolean(getPropertyName("permission.status-db"), true);
         if (!permission) {
             throw new MojoExecutionException("No permission to run this task!");
         }
@@ -61,50 +58,46 @@ public class HistoryMojo extends AbstractDatabaseMojo
             try {
                 final Migratory migratory = new Migratory(migratoryConfig, dbi, rootDbDbi);
                 migratory.addLocator(new MojoLocator(migratory, manifestUrl));
-                final Map<String, List<MetadataInfo>> results = migratory.dbHistory(availableMigrations.keySet(), optionList);
+                final Map<String, StatusResult> results = migratory.dbStatus(availableMigrations.keySet(), optionList);
 
-                dump(database, results);
+                dump(database, results.values());
                 CONSOLE.info(FRAME);
             }
             catch (MigratoryException me) {
-                CONSOLE.warn("While getting history for {}: {}", database, me);
+                CONSOLE.warn("While getting status for {}: {}", database, me);
             }
             catch (RuntimeException re) {
-                CONSOLE.warn("While getting history for {}: {}", database, re);
+                CONSOLE.warn("While getting status for {}: {}", database, re);
             }
         }
     }
 
-    private static final String FRAME  = "+---------------------------+---------------------------+-----------+------+-------+-----+--------------------+---------------------+";
-    private static final String HEADER = "|         Database          |        Personality        | Migration | Type | State | Dir |       User         | Date                |";
-    private static final String BODY   = "| %-25s | %-25s | %4d-%-4d | %-4s | %-5s | %-3s | %-18s | %18s |";
+    private static final String FRAME  = "+---------------------------+---------------------------+-------+------+-------+------+---------+-----+";
+    private static final String HEADER = "|         Database          |        Personality        | State | Curr | First | Last | Migrate | Dir |";
+    private static final String BODY   = "| %-25s | %-25s | %-5s | %4d |  %4s | %4s |    %1s    | %-3s |";
 
-    public static void dump(final String database, final Map<String, List<MetadataInfo>> results)
+    public static void dump(final String database, final Collection<StatusResult> results)
     {
         if (results == null || results.isEmpty()) {
             return;
         }
 
-        for (final Map.Entry<String, List<MetadataInfo>> result : results.entrySet()) {
-            final String personalityName = result.getKey();
-            for (final MetadataInfo info : result.getValue()) {
-
-                CONSOLE.info(String.format(BODY,
-                                       database,
-                                       personalityName,
-                                       info.getStartVersion(),
-                                       info.getEndVersion(),
-                                       info.getType(),
-                                       info.getState(),
-                                       shortDir(info.getDirection()),
-                                       info.getUser(),
-                                       DATE_FORMAT.print(info.getCreated())
-                             ));
-            }
+        for (StatusResult result : results) {
+            CONSOLE.info(String.format(BODY,
+                              database,
+                              result.getPersonalityName(),
+                              result.getLastState(),
+                              result.getCurrentVersion(),
+                              // If the status code has no access to the available migrations (because there is
+                              // no locator or loader, those will be MAX_VALUE for first and MIN_VALUE for last.
+                              // In that case, ignore the output.
+                              result.getFirstVersion() != Integer.MAX_VALUE ? Integer.toString(result.getFirstVersion()) : "",
+                              result.getLastVersion() != Integer.MIN_VALUE ? Integer.toString(result.getLastVersion()) : "",
+                              result.isMigrationPossible() ? "Y" : "N",
+                              shortDir(result.getDirection())
+                         ));
         }
     }
-
-
 
     private static String shortDir(final MigrationDirection dir)
     {
@@ -113,8 +106,9 @@ public class HistoryMojo extends AbstractDatabaseMojo
             return "FWD";
         case BACK:
             return "BCK";
+
         default:
-            return dir.name();
+            return "";
         }
     }
 }

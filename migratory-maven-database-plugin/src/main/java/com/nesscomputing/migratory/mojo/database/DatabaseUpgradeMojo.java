@@ -25,7 +25,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  * @requiresProject false
  * @goal upgrade
  */
-public class UpgradeMojo extends AbstractDatabaseMojo
+public class DatabaseUpgradeMojo extends AbstractDatabaseMojo
 {
     private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 

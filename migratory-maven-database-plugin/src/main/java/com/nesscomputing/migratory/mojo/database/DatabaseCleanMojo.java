@@ -19,9 +19,9 @@ import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
  * @requiresProject false
  * @goal clean
  */
-public class CleanMojo extends AbstractDatabaseMojo
+public class DatabaseCleanMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(CleanMojo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseCleanMojo.class);
 
     /**
      * @parameter expression="${databases}"

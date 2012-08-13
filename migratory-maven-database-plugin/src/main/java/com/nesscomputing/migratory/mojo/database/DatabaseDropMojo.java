@@ -24,9 +24,9 @@ import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator
  * @requiresProject false
  * @goal drop
  */
-public class DropMojo extends AbstractDatabaseMojo
+public class DatabaseDropMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(DropMojo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseDropMojo.class);
 
     /**
      * @parameter expression="${databases}"
