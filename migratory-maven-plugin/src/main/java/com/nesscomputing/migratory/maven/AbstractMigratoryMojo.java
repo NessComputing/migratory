@@ -97,11 +97,11 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException
     {
-        this.optionList = parseOptions(options);
-
         ConfigureLog4j.start(this);
 
         try {
+            this.optionList = parseOptions(options);
+
             final Migratory migratory = new Migratory(getConfig(), createDBI());
             doExecute(migratory);
         }
