@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryOption;
-import com.pyx4j.log4j.MavenLogAppender;
 
 abstract class AbstractMigratoryMojo extends AbstractMojo
 {
@@ -100,7 +99,8 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
     {
         this.optionList = parseOptions(options);
 
-        MavenLogAppender.startPluginLog(this);
+        ConfigureLog4j.start(this);
+
         try {
             final Migratory migratory = new Migratory(getConfig(), createDBI());
             doExecute(migratory);
@@ -110,7 +110,7 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
             throw new MojoExecutionException("Migratory Error: ", e);
         }
         finally {
-            MavenLogAppender.endPluginLog(this);
+            ConfigureLog4j.stop(this);
         }
     }
 

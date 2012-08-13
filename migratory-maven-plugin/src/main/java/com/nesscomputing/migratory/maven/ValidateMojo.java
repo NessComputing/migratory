@@ -37,7 +37,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class ValidateMojo extends AbstractMigratoryMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(ValidateMojo.class);
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
         "+---------------------+--------------------+--------------------------------+",
@@ -71,18 +71,18 @@ public class ValidateMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = SHORT;
 
-        LOG.info(formatInfo.getFrame());
-        LOG.info(String.format(formatInfo.getName(), personality, result.getValidationStatus()));
-        LOG.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info(String.format(formatInfo.getName(), personality, result.getValidationStatus()));
+        CONSOLE.info(formatInfo.getFrame());
         final List<ValidationResultProblem> problems = result.getProblems();
         if (!problems.isEmpty()) {
-            LOG.info(formatInfo.getHeader());
-            LOG.info(formatInfo.getFrame());
+            CONSOLE.info(formatInfo.getHeader());
+            CONSOLE.info(formatInfo.getFrame());
             for (ValidationResultProblem problem: problems) {
-                LOG.info(formatInfo.getFormat(),
+                CONSOLE.info(formatInfo.getFormat(),
                          problem.getValidationStatus(),
                          problem.getReason());
-                LOG.info(formatInfo.getFrame());
+                CONSOLE.info(formatInfo.getFrame());
             }
         }
     }

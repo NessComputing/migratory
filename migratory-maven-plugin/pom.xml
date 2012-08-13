@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.nesscomputing.migratory</groupId>
     <artifactId>migratory-parent</artifactId>
-    <version>3.1.2-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
   <groupId>com.nesscomputing.mojo</groupId>
   <artifactId>migratory-maven-plugin</artifactId>
@@ -20,6 +20,11 @@
     <dependency>
       <groupId>com.nesscomputing.migratory</groupId>
       <artifactId>migratory-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.mojo</groupId>
+      <artifactId>migratory-maven-common</artifactId>
     </dependency>
 
     <!-- 3rd party -->
@@ -60,13 +65,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.pyx4j</groupId>
-      <artifactId>maven-plugin-log4j</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>   
+      <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
 
@@ -80,7 +80,6 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>${version.maven}</version>
     </dependency>
 
     <dependency>
@@ -94,7 +93,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.9</version>
         <executions>
           <execution>
             <id>help-mojo</id>
@@ -104,6 +102,19 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>

@@ -27,7 +27,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class HistoryMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(HistoryMojo.class);
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     private static final DateTimeFormatter DATE_FORMAT = ISODateTimeFormat.dateHourMinuteSecond();
 
@@ -46,9 +46,9 @@ public class HistoryMojo extends AbstractDatabaseMojo
             throw new MojoExecutionException("No permission to run this task!");
         }
 
-        LOG.info(FRAME);
-        LOG.info(HEADER);
-        LOG.info(FRAME);
+        CONSOLE.info(FRAME);
+        CONSOLE.info(HEADER);
+        CONSOLE.info(FRAME);
 
         for (String database : databaseList) {
 
@@ -64,13 +64,13 @@ public class HistoryMojo extends AbstractDatabaseMojo
                 final Map<String, List<MetadataInfo>> results = migratory.dbHistory(availableMigrations.keySet(), optionList);
 
                 dump(database, results);
-                LOG.info(FRAME);
+                CONSOLE.info(FRAME);
             }
             catch (MigratoryException me) {
-                LOG.warn("While getting history for {}: {}", database, me);
+                CONSOLE.warn("While getting history for {}: {}", database, me);
             }
             catch (RuntimeException re) {
-                LOG.warn("While getting history for {}: {}", database, re);
+                CONSOLE.warn("While getting history for {}: {}", database, re);
             }
         }
     }
@@ -89,7 +89,7 @@ public class HistoryMojo extends AbstractDatabaseMojo
             final String personalityName = result.getKey();
             for (final MetadataInfo info : result.getValue()) {
 
-                LOG.info(String.format(BODY,
+                CONSOLE.info(String.format(BODY,
                                        database,
                                        personalityName,
                                        info.getStartVersion(),

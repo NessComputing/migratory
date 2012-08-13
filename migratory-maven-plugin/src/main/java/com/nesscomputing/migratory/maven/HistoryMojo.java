@@ -40,7 +40,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class HistoryMojo extends AbstractMigratoryMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(HistoryMojo.class);
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
        "+-----------+------+-------+-----+--------------------+---------------------+",
@@ -89,13 +89,13 @@ public class HistoryMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = verbose ? VERBOSE : SHORT;
 
-        LOG.info(formatInfo.getFrame());
-        LOG.info(String.format(formatInfo.getName(), personality));
-        LOG.info(formatInfo.getFrame());
-        LOG.info(formatInfo.getHeader());
-        LOG.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info(String.format(formatInfo.getName(), personality));
+        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getHeader());
+        CONSOLE.info(formatInfo.getFrame());
         for (MetadataInfo metadataInfo : info) {
-            LOG.info(String.format(formatInfo.getFormat(),
+            CONSOLE.info(String.format(formatInfo.getFormat(),
                                    metadataInfo.getStartVersion(),
                                    metadataInfo.getEndVersion(),
                                    metadataInfo.getType(),
@@ -108,7 +108,7 @@ public class HistoryMojo extends AbstractMigratoryMojo
                                    metadataInfo.getScriptName()
                 ));
         }
-        LOG.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getFrame());
     }
 
     private static String shortDir(final MigrationDirection dir)

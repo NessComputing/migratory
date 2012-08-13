@@ -38,9 +38,9 @@ import com.nesscomputing.migratory.loader.FileLoader;
 import com.nesscomputing.migratory.loader.HttpLoader;
 import com.nesscomputing.migratory.loader.JarLoader;
 import com.nesscomputing.migratory.loader.LoaderManager;
+import com.nesscomputing.migratory.maven.ConfigureLog4j;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
 import com.nesscomputing.migratory.mojo.database.util.InitialConfig;
-import com.pyx4j.log4j.MavenLogAppender;
 
 public abstract class AbstractDatabaseMojo extends AbstractMojo
 {
@@ -97,7 +97,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException
     {
-        MavenLogAppender.startPluginLog(this);
+        ConfigureLog4j.start(this);
 
         try {
             // Load the default manifest information.
@@ -194,7 +194,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             throw new MojoExecutionException("Failure:" ,e);
         }
         finally {
-            MavenLogAppender.endPluginLog(this);
+            ConfigureLog4j.stop(this);
         }
     }
 

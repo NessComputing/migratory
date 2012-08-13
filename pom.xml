@@ -9,7 +9,7 @@
 
   <groupId>com.nesscomputing.migratory</groupId>
   <artifactId>migratory-parent</artifactId>
-  <version>3.1.2-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
 
@@ -21,9 +21,14 @@
 
   <modules>
     <module>migratory-core</module>
+    <module>migratory-maven-common</module>
     <module>migratory-maven-plugin</module>
     <module>maven-database-plugin</module>
   </modules>
+
+  <properties>
+    <dep.maven.api>2.2.1</dep.maven.api>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
@@ -36,7 +41,19 @@
 
       <dependency>
         <groupId>com.nesscomputing.mojo</groupId>
+        <artifactId>migratory-maven-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.nesscomputing.mojo</groupId>
         <artifactId>migratory-maven-plugin</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.nesscomputing.mojo</groupId>
+        <artifactId>maven-database-plugin</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -102,6 +119,31 @@
         <version>9.1-901-1.jdbc4</version>
       </dependency>
 
+      <!-- maven -->
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-plugin-api</artifactId>
+        <version>${dep.maven.api}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-project</artifactId>
+        <version>${dep.maven.api}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>1.5.15</version>
+      </dependency>
+
       <dependency>
         <groupId>com.nesscomputing.testing</groupId>
         <artifactId>findbugs-annotations</artifactId>
@@ -117,14 +159,14 @@
           <groupId>org.codehaus.plexus</groupId>
           <artifactId>plexus-maven-plugin</artifactId>
           <version>1.3.8</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>descriptor</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>2.9</version>
+        </plugin>
+
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>

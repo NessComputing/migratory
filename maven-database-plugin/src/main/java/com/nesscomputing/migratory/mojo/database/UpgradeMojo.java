@@ -27,7 +27,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class UpgradeMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(UpgradeMojo.class);
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * Describes the migrations for this database.
@@ -63,7 +63,7 @@ public class UpgradeMojo extends AbstractDatabaseMojo
             try {
                 final MigrationPlan rootMigrationPlan  = createMigrationPlan(database);
                 if (!rootMigrationPlan.isEmpty()) {
-                    LOG.info("Migrating {} ...", databaseName);
+                    CONSOLE.info("Migrating {} ...", databaseName);
 
                     Migratory migratory = new Migratory(migratoryConfig, dbi, rootDbDbi);
                     migratory.addLocator(new MojoLocator(migratory, manifestUrl));
@@ -71,9 +71,9 @@ public class UpgradeMojo extends AbstractDatabaseMojo
                 }
             }
             catch (MigratoryException me) {
-                LOG.warn(String.format("While creating '%s': %s, Reason: %s", databaseName, me.getMessage(), me.getReason()));
+                CONSOLE.warn(String.format("While creating '%s': %s, Reason: %s", databaseName, me.getMessage(), me.getReason()));
             }
-            LOG.info("... done");
+            CONSOLE.info("... done");
         }
     }
 

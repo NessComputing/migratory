@@ -26,7 +26,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class StatusMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(StatusMojo.class);
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * @parameter expression="${databases}" default-value="all"
@@ -43,9 +43,9 @@ public class StatusMojo extends AbstractDatabaseMojo
             throw new MojoExecutionException("No permission to run this task!");
         }
 
-        LOG.info(FRAME);
-        LOG.info(HEADER);
-        LOG.info(FRAME);
+        CONSOLE.info(FRAME);
+        CONSOLE.info(HEADER);
+        CONSOLE.info(FRAME);
 
         for (String database : databaseList) {
 
@@ -61,13 +61,13 @@ public class StatusMojo extends AbstractDatabaseMojo
                 final Map<String, StatusResult> results = migratory.dbStatus(availableMigrations.keySet(), optionList);
 
                 dump(database, results.values());
-                LOG.info(FRAME);
+                CONSOLE.info(FRAME);
             }
             catch (MigratoryException me) {
-                LOG.warn("While getting status for {}: {}", database, me);
+                CONSOLE.warn("While getting status for {}: {}", database, me);
             }
             catch (RuntimeException re) {
-                LOG.warn("While getting status for {}: {}", database, re);
+                CONSOLE.warn("While getting status for {}: {}", database, re);
             }
         }
     }
@@ -83,7 +83,7 @@ public class StatusMojo extends AbstractDatabaseMojo
         }
 
         for (StatusResult result : results) {
-            LOG.info(String.format(BODY,
+            CONSOLE.info(String.format(BODY,
                               database,
                               result.getPersonalityName(),
                               result.getLastState(),

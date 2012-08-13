@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//log4j//DTD//EN" "http://logging.apache.org/log4j/docs/api/org/apache/log4j/xml/log4j.dtd">
+
+<log4j:configuration>
+
+  <appender name="MavenLogAppender" class="com.pyx4j.log4j.MavenLogAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%m" />
+    </layout>
+  </appender>
+
+  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%m%n" />
+    </layout>
+  </appender>
+
+  <logger name="console">
+    <param name="additivity" value="false" />
+    <level value="info" />
+    <appender-ref ref="CONSOLE" />
+  </logger>
+
+  <logger name="org.skife.config">
+    <level value="warn"/>
+  </logger>
+
+  <root>
+    <level value="debug" />
+    <appender-ref ref="MavenLogAppender" />
+  </root>
+
+</log4j:configuration>
