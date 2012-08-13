@@ -23,7 +23,7 @@
     <module>migratory-core</module>
     <module>migratory-maven-common</module>
     <module>migratory-maven-plugin</module>
-    <module>maven-database-plugin</module>
+    <module>migratory-maven-database-plugin</module>
   </modules>
 
   <properties>

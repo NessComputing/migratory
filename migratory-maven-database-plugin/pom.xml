@@ -13,7 +13,6 @@
   <name>${project.artifactId}</name>
 
   <properties>
-    <version.maven>2.2.1</version.maven>
     <ness.root.dir>${project.parent.basedir}</ness.root.dir>
   </properties>
 
