@@ -9,7 +9,7 @@
 
   <groupId>com.nesscomputing.migratory</groupId>
   <artifactId>migratory-parent</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
 
@@ -17,7 +17,7 @@
     <connection>scm:git:git://github.com/NessComputing/migratory.git</connection>
     <developerConnection>scm:git:git@github.com:NessComputing/migratory.git</developerConnection>
     <url>http://github.com/NessComputing/migratory</url>
-    <tag>migratory-parent-4.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
