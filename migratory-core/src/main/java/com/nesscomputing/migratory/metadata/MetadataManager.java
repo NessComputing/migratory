@@ -150,9 +150,14 @@ public class MetadataManager
 
     public void rollback()
     {
-        transactionHandle.rollback();
-        transactionHandle.close();
-        transactionHandle = null;
+        if (transactionHandle == null) {
+            LOG.warn("Got a late rollback after commit/rollback. Ignoring!");
+        }
+        else {
+            transactionHandle.rollback();
+            transactionHandle.close();
+            transactionHandle = null;
+        }
     }
 
     public Map<String, List<MetadataInfo>> getHistory(final Collection<String> personalities, final MigratoryOption [] options)
