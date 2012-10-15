@@ -86,7 +86,7 @@ public class DatabaseUpgradeMojo extends AbstractDatabaseMojo
                 }
             }
             catch (MigratoryException me) {
-                CONSOLE.warnDebug(me, "While creating '%s': %s, Reason: %s", databaseName, me.getMessage(), me.getReason());
+                throw new MojoExecutionException(String.format("While creating '%s': %s, Reason: %s", databaseName, me.getMessage(), me.getReason()), me);
             }
             CONSOLE.info("... done");
         }
