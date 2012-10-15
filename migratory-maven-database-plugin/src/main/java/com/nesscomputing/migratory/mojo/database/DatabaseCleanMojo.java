@@ -19,12 +19,13 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 
 /**
@@ -36,12 +37,13 @@ import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
  */
 public class DatabaseCleanMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseCleanMojo.class);
+    private static final Log CONSOLE = Log.forName("console");
 
     /**
      * @parameter expression="${databases}"
      * @required
      */
+    @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
     private String databases;
 
     @Override
@@ -55,7 +57,7 @@ public class DatabaseCleanMojo extends AbstractDatabaseMojo
         }
 
         for (String database : databaseList) {
-            LOG.info("Cleaning Database {}...", database);
+            CONSOLE.info("Cleaning Database %s...", database);
 
             final DBIConfig databaseConfig = getDBIConfigFor(database);
             final DBI rootDbDbi = new DBI(databaseConfig.getDBUrl(), rootDBIConfig.getDBUser(), rootDBIConfig.getDBPassword());
@@ -66,13 +68,13 @@ public class DatabaseCleanMojo extends AbstractDatabaseMojo
                 migratory.dbClean(optionList);
             }
             catch (MigratoryException me) {
-                LOG.warn("While cleaning {}: {}", database, me);
+                CONSOLE.warnDebug(me, "While cleaning %s", database);
             }
             catch (RuntimeException re) {
-                LOG.warn("While cleaning {}: {}", database, re);
+                CONSOLE.warnDebug(re, "While cleaning %s", database);
             }
 
-            LOG.info("... done");
+            CONSOLE.info("... done");
         }
     }
 }

@@ -27,6 +27,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -39,14 +45,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.skife.config.CommonsConfigSource;
 import org.skife.config.ConfigurationObjectFactory;
 import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.loader.FileLoader;
@@ -57,6 +57,8 @@ import com.nesscomputing.migratory.maven.ConfigureLog4j;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
 import com.nesscomputing.migratory.mojo.database.util.InitialConfig;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public abstract class AbstractDatabaseMojo extends AbstractMojo
 {
     private static final String [] MUST_EXIST = new String [] { "default.base", "default.root_url", "default.root_user", "default.root_password", "default.user", "default.password" };
@@ -65,7 +67,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
     public static final String MIGRATORY_PROPERTIES_FILE = ".migratory.properties";
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractDatabaseMojo.class);
+    private static final Log LOG = Log.findLog();
 
     private ConfigurationObjectFactory factory;
 
@@ -90,7 +92,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         sb.append(optionList == null ? "optionList is null, " : "");
 
         if (sb.length() > 0) {
-            throw new MojoExecutionException(format("Internal error (%s), refusing to run mojo !", sb));
+            throw new MojoExecutionException(format("Internal error(s) (%s), refusing to run mojo !", sb));
         }
     }
 
@@ -107,6 +109,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
     /**
      * @parameter expression="${options}"
      */
+    @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
     private String options;
 
     @Override
@@ -151,8 +154,8 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
                 throw new MojoExecutionException("no manifest name found (did you create a .migratory.properties file?)");
             }
 
-            LOG.debug("Manifest URL:      {}", manifestUrl);
-            LOG.debug("Manifest Name:     {}", manifestName);
+            LOG.debug("Manifest URL:      %s", manifestUrl);
+            LOG.debug("Manifest Name:     %s", manifestName);
 
             this.optionList = parseOptions(options);
 
@@ -167,7 +170,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             location.append(manifestName);
             location.append(".manifest");
 
-            LOG.debug("Manifest Location: {}", location);
+            LOG.debug("Manifest Location: %s", location);
 
             final MigratoryConfig initialMigratoryConfig = initialConfigFactory.build(MigratoryConfig.class);
             final LoaderManager initialLoaderManager = createLoaderManager(initialMigratoryConfig);
@@ -194,7 +197,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             this.migratoryConfig = factory.build(MigratoryConfig.class);
             this.loaderManager = createLoaderManager(migratoryConfig);
 
-            LOG.debug("Configuration: {}", this.config);
+            LOG.debug("Configuration: %s", this.config);
 
             this.rootDBIConfig = getDBIConfig(getPropertyName("default.root_"));
 
@@ -205,7 +208,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         catch (Exception e) {
             Throwables.propagateIfInstanceOf(e, MojoExecutionException.class);
 
-            LOG.error("While executing Mojo {}: {}", this.getClass().getSimpleName(), e);
+            LOG.errorDebug(e, "While executing Mojo %s", this.getClass().getSimpleName());
             throw new MojoExecutionException("Failure:" ,e);
         }
         finally {
@@ -330,7 +333,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             migratoryOptions[i] = MigratoryOption.valueOf(optionList[i].toUpperCase(Locale.ENGLISH));
         }
 
-        LOG.debug("Parsed {} into {}", options, migratoryOptions);
+        LOG.debug("Parsed %s into %s", options, migratoryOptions);
         return migratoryOptions;
     }
 
@@ -392,7 +395,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         for (String mustExist : MUST_EXIST) {
             final String propertyName = getPropertyName(mustExist);
             if (!config.containsKey(propertyName)) {
-                LOG.error("The required property '{}' does not exist in the manifest.", propertyName);
+                LOG.error("The required property '%s' does not exist in the manifest.", propertyName);
                 valid = false;
             }
         }
@@ -400,7 +403,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         for (String mustNotBeEmpty : MUST_NOT_BE_EMPTY) {
             final String propertyName = getPropertyName(mustNotBeEmpty);
             if (StringUtils.isBlank(config.getString(propertyName, null))) {
-                LOG.error("The property '{}' must not be empty.", propertyName);
+                LOG.error("The property '%s' must not be empty.", propertyName);
                 valid = false;
             }
         }

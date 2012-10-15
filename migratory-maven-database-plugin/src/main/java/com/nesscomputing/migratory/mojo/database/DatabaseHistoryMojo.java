@@ -22,9 +22,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
@@ -42,7 +41,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class DatabaseHistoryMojo extends AbstractDatabaseMojo
 {
-    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
+    private static final Log CONSOLE = Log.forName("console");
 
     private static final DateTimeFormatter DATE_FORMAT = ISODateTimeFormat.dateHourMinuteSecond();
 
@@ -82,10 +81,10 @@ public class DatabaseHistoryMojo extends AbstractDatabaseMojo
                 CONSOLE.info(FRAME);
             }
             catch (MigratoryException me) {
-                CONSOLE.warn("While getting history for {}: {}", database, me);
+                CONSOLE.warnDebug(me, "While getting history for %s", database);
             }
             catch (RuntimeException re) {
-                CONSOLE.warn("While getting history for {}: {}", database, re);
+                CONSOLE.warnDebug(re, "While getting history for %s", database);
             }
         }
     }

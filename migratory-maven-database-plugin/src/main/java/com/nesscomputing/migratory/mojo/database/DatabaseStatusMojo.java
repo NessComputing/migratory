@@ -21,9 +21,8 @@ import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.StatusResult;
@@ -41,7 +40,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class DatabaseStatusMojo extends AbstractDatabaseMojo
 {
-    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
+    private static final Log CONSOLE = Log.forName("console");
 
     /**
      * @parameter expression="${databases}" default-value="all"
@@ -79,10 +78,10 @@ public class DatabaseStatusMojo extends AbstractDatabaseMojo
                 CONSOLE.info(FRAME);
             }
             catch (MigratoryException me) {
-                CONSOLE.warn("While getting status for {}: {}", database, me);
+                CONSOLE.warnDebug(me, "While getting status for %s", database);
             }
             catch (RuntimeException re) {
-                CONSOLE.warn("While getting status for {}: {}", database, re);
+                CONSOLE.warnDebug(re, "While getting status for %s", database);
             }
         }
     }

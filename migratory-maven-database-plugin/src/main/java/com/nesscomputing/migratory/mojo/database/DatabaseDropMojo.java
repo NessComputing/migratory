@@ -24,12 +24,12 @@ import org.skife.jdbi.v2.exceptions.DBIException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.skife.jdbi.v2.tweak.StatementLocator;
 import org.skife.jdbi.v2.util.IntegerMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 
 /**
@@ -41,12 +41,13 @@ import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator
  */
 public class DatabaseDropMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(DatabaseDropMojo.class);
+    private static final Log CONSOLE = Log.forName("console");
 
     /**
      * @parameter expression="${databases}"
      * @required
      */
+    @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
     private String databases;
 
     @Override
@@ -77,7 +78,7 @@ public class DatabaseDropMojo extends AbstractDatabaseMojo
                 });
 
                 if (databaseExists) {
-                    LOG.info("Dropping Database {}...", database);
+                    CONSOLE.info("Dropping Database %s...", database);
 
                     if (!MigratoryOption.containsOption(MigratoryOption.DRY_RUN, optionList)) {
                         rootDbi.withHandle(new HandleCallback<Void>() {
@@ -92,14 +93,14 @@ public class DatabaseDropMojo extends AbstractDatabaseMojo
                         });
                     }
 
-                    LOG.info("... done");
+                    CONSOLE.info("... done");
                 }
                 else {
-                    LOG.info("... Database {} does not exist ...", database);
+                    CONSOLE.info("... Database %s does not exist ...", database);
                 }
             }
             catch (DBIException de) {
-                LOG.warn("While dropping {}: {}", database, de);
+                CONSOLE.warnDebug(de, "While dropping %s", database);
             }
         }
     }

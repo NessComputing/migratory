@@ -24,15 +24,15 @@ import org.skife.jdbi.v2.exceptions.DBIException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.skife.jdbi.v2.tweak.StatementLocator;
 import org.skife.jdbi.v2.util.IntegerMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
 import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Maven goal that creates all databases.
@@ -41,14 +41,15 @@ import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator
  * @requiresProject false
  * @goal create
  */
-public class CreateMojo extends AbstractDatabaseMojo
+public class DatabaseCreateMojo extends AbstractDatabaseMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(CreateMojo.class);
+    private static final Log CONSOLE = Log.forName("console");
 
     /**
      * @parameter expression="${databases}"
      * @required
      */
+    @SuppressFBWarnings("UWF_UNWRITTEN_FIELD")
     private String databases;
 
     @Override
@@ -75,7 +76,7 @@ public class CreateMojo extends AbstractDatabaseMojo
             rootDbDbi.setStatementLocator(statementLocator);
 
             if (MigratoryOption.containsOption(MigratoryOption.DRY_RUN, optionList)) {
-                LOG.info("Dry run for database {} activated!", database);
+                CONSOLE.info("Dry run for database %s activated!", database);
             }
             else {
                 // User and Database creation runs as root user connected to the root db
@@ -91,10 +92,10 @@ public class CreateMojo extends AbstractDatabaseMojo
                     });
 
                     if (userExists) {
-                        LOG.trace("... User {} already exists ...", user);
+                        CONSOLE.info("... User %s already exists ...", user);
                     }
                     else {
-                        LOG.info("... creating User {} ...", user);
+                        CONSOLE.info("... creating User %s ...", user);
 
                         rootDbi.withHandle(new HandleCallback<Void>() {
                             @Override
@@ -120,10 +121,10 @@ public class CreateMojo extends AbstractDatabaseMojo
 
 
                     if (databaseExists) {
-                        LOG.info("... Database {} already exists ...", database);
+                        CONSOLE.info("... Database %s already exists ...", database);
                     }
                     else {
-                        LOG.info("... creating Database {}...", database);
+                        CONSOLE.info("... creating Database %s...", database);
 
                         final String tablespace;
 
@@ -142,7 +143,7 @@ public class CreateMojo extends AbstractDatabaseMojo
                                 tablespace = databaseConfig.getDBTablespace();
                             }
                             else {
-                                LOG.warn("Tablespace '" + databaseConfig.getDBTablespace() + "' does not exist, falling back to default!");
+                                CONSOLE.warn("Tablespace '%s' does not exist, falling back to default!", databaseConfig.getDBTablespace());
                                 tablespace = null;
                             }
                         }
@@ -165,7 +166,7 @@ public class CreateMojo extends AbstractDatabaseMojo
 
                 }
                 catch (DBIException de) {
-                    LOG.warn("While creating {}: {}", database, de);
+                    CONSOLE.warnDebug(de, "While creating %s", database);
                 }
 
                 try {
@@ -180,10 +181,10 @@ public class CreateMojo extends AbstractDatabaseMojo
 
 
                     if (languageExists) {
-                        LOG.trace("Language plpgsql exists");
+                        CONSOLE.trace("Language plpgsql exists");
                     }
                     else {
-                        LOG.info("... creating plpgsql language...");
+                        CONSOLE.info("... creating plpgsql language...");
 
                         rootDbDbi.withHandle(new HandleCallback<Void>() {
                             @Override
@@ -196,7 +197,7 @@ public class CreateMojo extends AbstractDatabaseMojo
                     }
                 }
                 catch (DBIException de) {
-                    LOG.warn("While creating {}: {}", database, de);
+                    CONSOLE.warnDebug(de, "While creating %s", database);
                 }
 
                 final boolean createSchema = config.getBoolean(getPropertyName("schema.create"), false);
@@ -205,10 +206,10 @@ public class CreateMojo extends AbstractDatabaseMojo
                     final String schemaName = databaseConfig.getDBUser();
                     try {
                         if (detectSchema(rootDbDbi, schemaName)) {
-                            LOG.trace("Schema {} exists", schemaName);
+                            CONSOLE.trace("Schema %s exists", schemaName);
                         }
                         else {
-                            LOG.info("... creating Schema {} ...", schemaName);
+                            CONSOLE.info("... creating Schema %s ...", schemaName);
 
                             rootDbDbi.withHandle(new HandleCallback<Void>() {
                                 @Override
@@ -222,7 +223,7 @@ public class CreateMojo extends AbstractDatabaseMojo
                         }
                     }
                     catch (DBIException de) {
-                        LOG.warn("While creating schema {}: {}", schemaName, de);
+                        CONSOLE.warnDebug(de, "While creating schema %s", schemaName);
                     }
 
                     final boolean enforceSchema = config.getBoolean(getPropertyName("schema.enforce"), false);
@@ -230,10 +231,10 @@ public class CreateMojo extends AbstractDatabaseMojo
                     if (enforceSchema) {
                         try {
                             if (!detectSchema(rootDbDbi, "public")) {
-                                LOG.trace("public schema does not exist");
+                                CONSOLE.trace("public schema does not exist");
                             }
                             else {
-                                LOG.info("... dropping public schema ...");
+                                CONSOLE.info("... dropping public schema ...");
 
                                 rootDbDbi.withHandle(new HandleCallback<Void>() {
                                     @Override
@@ -247,17 +248,17 @@ public class CreateMojo extends AbstractDatabaseMojo
                             }
                         }
                         catch (DBIException de) {
-                            LOG.warn("While dropping public schema: {}", de);
+                            CONSOLE.warnDebug(de, "While dropping public schema: %s", schemaName);
                         }
                     }
                 }
                 else {
-                    LOG.info("... not creating schema ...");
+                    CONSOLE.info("... not creating schema ...");
                 }
 
 
                 try {
-                    LOG.info("... initializing metadata ...");
+                    CONSOLE.info("... initializing metadata ...");
 
                     // Finally metadata is created as the database owner connected to the database.
 
@@ -267,13 +268,13 @@ public class CreateMojo extends AbstractDatabaseMojo
                     migratory.dbInit();
                 }
                 catch (DBIException de) {
-                    LOG.warn("While creating {}: {}", database, de);
+                    CONSOLE.warnDebug(de, "While creating %s", database);
                 }
                 catch (MigratoryException me) {
-                    LOG.warn("While creating {}: {}", database, me);
+                    CONSOLE.warnDebug(me, "While creating %s", database);
                 }
             }
-            LOG.info("... done");
+            CONSOLE.info("... done");
         }
     }
 

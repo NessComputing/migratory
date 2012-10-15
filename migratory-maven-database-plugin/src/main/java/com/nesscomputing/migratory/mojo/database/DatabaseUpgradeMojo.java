@@ -19,13 +19,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.migration.MigrationPlan;
@@ -42,7 +42,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class DatabaseUpgradeMojo extends AbstractDatabaseMojo
 {
-    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
+    private static final Log CONSOLE = Log.forName("console");
 
     /**
      * Describes the migrations for this database.
@@ -78,7 +78,7 @@ public class DatabaseUpgradeMojo extends AbstractDatabaseMojo
             try {
                 final MigrationPlan rootMigrationPlan  = createMigrationPlan(database);
                 if (!rootMigrationPlan.isEmpty()) {
-                    CONSOLE.info("Migrating {} ...", databaseName);
+                    CONSOLE.info("Migrating %s ...", databaseName);
 
                     Migratory migratory = new Migratory(migratoryConfig, dbi, rootDbDbi);
                     migratory.addLocator(new MojoLocator(migratory, manifestUrl));
@@ -86,7 +86,7 @@ public class DatabaseUpgradeMojo extends AbstractDatabaseMojo
                 }
             }
             catch (MigratoryException me) {
-                CONSOLE.warn(String.format("While creating '%s': %s, Reason: %s", databaseName, me.getMessage(), me.getReason()));
+                CONSOLE.warnDebug(me, "While creating '%s': %s, Reason: %s", databaseName, me.getMessage(), me.getReason());
             }
             CONSOLE.info("... done");
         }
