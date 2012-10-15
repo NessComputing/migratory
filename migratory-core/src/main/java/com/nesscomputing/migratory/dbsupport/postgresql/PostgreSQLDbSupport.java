@@ -21,14 +21,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.skife.jdbi.v2.util.StringMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.dbsupport.DbSupport;
 import com.nesscomputing.migratory.migration.sql.SqlScript;
 import com.nesscomputing.migratory.migration.sql.SqlStatement;
@@ -38,7 +38,7 @@ import com.nesscomputing.migratory.migration.sql.SqlStatement;
  */
 public class PostgreSQLDbSupport implements DbSupport
 {
-    private static final Logger LOG = LoggerFactory.getLogger(PostgreSQLDbSupport.class);
+    private static final Log LOG = Log.findLog();
 
     private final static String[] TABLE_EXISTS_TABLE_TYPES = new String[]{"TABLE"};
 
@@ -136,7 +136,7 @@ public class PostgreSQLDbSupport implements DbSupport
                     sqlStatement.addDefine(entry.getKey(), entry.getValue());
                 }
                 sqlStatements.add(sqlStatement);
-                LOG.trace("adding SQL Statement: {}", sqlStatement);
+                LOG.trace("adding SQL Statement: %s", sqlStatement);
             }
         }
 

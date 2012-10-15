@@ -19,10 +19,13 @@ package com.nesscomputing.migratory.maven;
 import java.util.List;
 import java.util.Map;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultProblem;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Maven goal to validate the applied migrations in the database against the available classpath migrations in order to
@@ -32,6 +35,8 @@ import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultP
  */
 public class ValidateMojo extends AbstractMigratoryMojo
 {
+    private static final Log CONSOLE = Log.forName("console");
+
     private static final FormatInfo SHORT = new FormatInfo(
         "+---------------------+--------------------+--------------------------------+",
         "| %-40s | %-30s |\n",
@@ -42,7 +47,8 @@ public class ValidateMojo extends AbstractMigratoryMojo
     /**
      * @parameter expression="${personalities}"
      */
-    protected String personalities;
+    @SuppressFBWarnings("UWF_NULL_FIELD")
+    protected String personalities = null;
 
     @Override
     protected void doExecute(final Migratory migratory) throws Exception
@@ -63,20 +69,19 @@ public class ValidateMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = SHORT;
 
-        System.out.println(formatInfo.getFrame());
-        System.out.printf(formatInfo.getName(), personality, result.getValidationStatus());
-        System.out.println(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getName(), personality, result.getValidationStatus());
+        CONSOLE.info(formatInfo.getFrame());
         final List<ValidationResultProblem> problems = result.getProblems();
         if (!problems.isEmpty()) {
-            System.out.println(formatInfo.getHeader());
-            System.out.println(formatInfo.getFrame());
+            CONSOLE.info(formatInfo.getHeader());
+            CONSOLE.info(formatInfo.getFrame());
             for (ValidationResultProblem problem: problems) {
-                System.out.printf(formatInfo.getFormat(),
-                                  problem.getValidationStatus(),
-                                  problem.getReason());
-                System.out.println(formatInfo.getFrame());
+                CONSOLE.info(formatInfo.getFormat(),
+                         problem.getValidationStatus(),
+                         problem.getReason());
+                CONSOLE.info(formatInfo.getFrame());
             }
         }
-        System.out.println();
     }
 }

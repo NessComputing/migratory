@@ -24,7 +24,6 @@ import org.skife.jdbi.v2.IDBI;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.TestMigratory;
-import com.nesscomputing.migratory.dbsupport.DbSupport;
 import com.nesscomputing.migratory.dbsupport.h2.H2DbSupport;
 
 public class TestDbSupportFactory

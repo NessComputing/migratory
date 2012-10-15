@@ -19,8 +19,8 @@ package com.nesscomputing.migratory.migration;
 import java.util.Collection;
 import java.util.Map;
 
-
 import com.google.common.collect.Maps;
+
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.locator.MigrationLocator;
 import com.nesscomputing.migratory.metadata.MetadataManager;

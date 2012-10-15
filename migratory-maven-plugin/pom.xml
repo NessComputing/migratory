@@ -3,8 +3,9 @@
   <parent>
     <groupId>com.nesscomputing.migratory</groupId>
     <artifactId>migratory-parent</artifactId>
-    <version>3.1.2-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
+
   <groupId>com.nesscomputing.mojo</groupId>
   <artifactId>migratory-maven-plugin</artifactId>
 
@@ -12,7 +13,6 @@
   <name>${project.artifactId}</name>
 
   <properties>
-    <version.maven>2.2.1</version.maven>
     <ness.root.dir>${project.parent.basedir}</ness.root.dir>
   </properties>
 
@@ -20,6 +20,16 @@
     <dependency>
       <groupId>com.nesscomputing.migratory</groupId>
       <artifactId>migratory-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.mojo</groupId>
+      <artifactId>migratory-maven-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.components</groupId>
+      <artifactId>ness-logging</artifactId>
     </dependency>
 
     <!-- 3rd party -->
@@ -31,17 +41,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -60,13 +59,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.pyx4j</groupId>
-      <artifactId>maven-plugin-log4j</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>   
+      <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
 
@@ -80,24 +74,49 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>${version.maven}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.testing</groupId>
+      <artifactId>findbugs-annotations</artifactId>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>help-mojo</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
         <configuration>
-          <failOnError>false</failOnError>
-          <effort>Default</effort>
+          <excludeFilterFile>${project.basedir}/src/tools/findbugsExclude.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
 </project>

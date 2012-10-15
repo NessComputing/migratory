@@ -18,9 +18,7 @@ package com.nesscomputing.migratory;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.metadata.MetadataManager;
@@ -30,7 +28,7 @@ import com.nesscomputing.migratory.metadata.MetadataManager;
  */
 class InternalInit extends AbstractMigratorySupport
 {
-    private static final Logger LOG = LoggerFactory.getLogger(InternalInit.class);
+    private static final Log LOG = Log.findLog();
 
     private final MigratoryContext migratoryContext;
 
@@ -41,7 +39,7 @@ class InternalInit extends AbstractMigratorySupport
 
     List<MetadataInfo> init(final MigratoryOption [] options)
     {
-        LOG.debug("Running init()");
+        LOG.debug("Running init(%s)", String.valueOf(options));
         if (migratoryContext.getConfig().isReadOnly()) {
             throw new MigratoryException(Reason.IS_READONLY);
         }

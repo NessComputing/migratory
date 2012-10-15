@@ -20,26 +20,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Maps;
+
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.metadata.MetadataManager;
 import com.nesscomputing.migratory.migration.DbMigrator;
 import com.nesscomputing.migratory.migration.MigrationManager;
 import com.nesscomputing.migratory.migration.MigrationPlan;
+import com.nesscomputing.migratory.migration.MigrationPlan.MigrationPlanEntry;
 import com.nesscomputing.migratory.migration.MigrationPlanner;
 import com.nesscomputing.migratory.migration.MigrationResult;
-import com.nesscomputing.migratory.migration.MigrationPlan.MigrationPlanEntry;
+import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 import com.nesscomputing.migratory.validation.DbValidator;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationStatus;
 
 class InternalMigrator extends AbstractMigratorySupport
 {
-    private static final Logger LOG = LoggerFactory.getLogger(InternalMigrator.class);
+    private static final Log LOG = Log.findLog();
 
     private final MigratoryContext migratoryContext;
     private final MigratoryConfig migratoryConfig;
@@ -82,9 +82,15 @@ class InternalMigrator extends AbstractMigratorySupport
                 try {
                     metadataManager.lock(personalityName);
                     final List<MigrationResult> results = migratePersonality(metadataManager, personalityName, migrationPlanEntry.getTargetVersion(), options);
+
                     final List<MetadataInfo> personalityMigrationResult = metadataManager.commit(results);
                     if (!personalityMigrationResult.isEmpty()) {
                         migrationResults.put(personalityName, personalityMigrationResult);
+                    }
+
+                    final MigrationState state = MigrationResult.determineMigrationState(results);
+                    if (state != MigrationState.OK) {
+                        break;
                     }
                 }
                 catch (MigratoryException me) {
@@ -157,13 +163,13 @@ class InternalMigrator extends AbstractMigratorySupport
             return null;
 
         default:
-            LOG.warn("Encountered State {}. This should never happen!", migrationPlanner.getDirection());
+            LOG.warn("Encountered State %s. This should never happen!", migrationPlanner.getDirection());
             return null;
         }
 
         final DbMigrator migrator = new DbMigrator(migratoryContext, migrationPlanner);
         final List<MigrationResult> results = migrator.migrate(options);
-        LOG.info("Migration successful in '{}' steps.", results.size());
+        LOG.info("Migration finished in '%d' steps, result is %s",  results.size(), MigrationResult.determineMigrationState(results));
         return results;
     }
 }

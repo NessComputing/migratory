@@ -18,16 +18,12 @@ package com.nesscomputing.migratory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 
-
 import java.util.Properties;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 
-import com.nesscomputing.migratory.Migratory;
-import com.nesscomputing.migratory.MigratoryConfig;
-import com.nesscomputing.migratory.MigratoryDBIConfig;
 import com.nesscomputing.migratory.dbsupport.DbSupport;
 import com.nesscomputing.migratory.dbsupport.h2.H2DbSupport;
 

@@ -21,8 +21,6 @@ import java.net.URI;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
@@ -40,8 +38,6 @@ import com.nesscomputing.migratory.MigratoryException.Reason;
  */
 public class DefaultMigrationInformationStrategy implements MigrationInformationStrategy
 {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultMigrationInformationStrategy.class);
-
     public MigrationInformation getInformation(final URI location)
     {
         if (location == null) {
@@ -86,8 +82,6 @@ public class DefaultMigrationInformationStrategy implements MigrationInformation
                     throw new MigratoryException(Reason.INTERNAL, "Can not interpret '%s'!", fileName);
             }
 
-            LOG.debug("length: {}", pieces.length);
-            LOG.debug("value: {}", "root".equals(pieces[2].toLowerCase(Locale.ENGLISH)));
             final boolean needsRoot = (pieces.length == 4 && "root".equals(pieces[2].toLowerCase(Locale.ENGLISH)));
 
             boolean template = false;

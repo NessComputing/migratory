@@ -20,9 +20,10 @@ import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.google.common.base.Charsets;
+
 import org.skife.jdbi.v2.Handle;
 
-import com.google.common.base.Charsets;
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.information.MigrationInformation;
 import com.nesscomputing.migratory.jdbi.MigratoryDBI;

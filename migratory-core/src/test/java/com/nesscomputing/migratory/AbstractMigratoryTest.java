@@ -21,6 +21,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,17 +33,11 @@ import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.skife.jdbi.v2.util.IntegerMapper;
 import org.skife.jdbi.v2.util.StringMapper;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import com.nesscomputing.migratory.Migratory;
-import com.nesscomputing.migratory.MigratoryConfig;
-import com.nesscomputing.migratory.MigratoryContext;
-import com.nesscomputing.migratory.StatusResult;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlan;
-import com.nesscomputing.migratory.migration.MigrationType;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
 import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
+import com.nesscomputing.migratory.migration.MigrationType;
 import com.nesscomputing.migratory.migration.sql.SqlMigration;
 
 public abstract class AbstractMigratoryTest
