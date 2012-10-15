@@ -32,6 +32,7 @@ import com.nesscomputing.migratory.migration.MigrationPlan;
 import com.nesscomputing.migratory.migration.MigrationPlan.MigrationPlanEntry;
 import com.nesscomputing.migratory.migration.MigrationPlanner;
 import com.nesscomputing.migratory.migration.MigrationResult;
+import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 import com.nesscomputing.migratory.validation.DbValidator;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationStatus;
@@ -81,9 +82,15 @@ class InternalMigrator extends AbstractMigratorySupport
                 try {
                     metadataManager.lock(personalityName);
                     final List<MigrationResult> results = migratePersonality(metadataManager, personalityName, migrationPlanEntry.getTargetVersion(), options);
+
                     final List<MetadataInfo> personalityMigrationResult = metadataManager.commit(results);
                     if (!personalityMigrationResult.isEmpty()) {
                         migrationResults.put(personalityName, personalityMigrationResult);
+                    }
+
+                    final MigrationState state = MigrationResult.determineMigrationState(results);
+                    if (state != MigrationState.OK) {
+                        break;
                     }
                 }
                 catch (MigratoryException me) {
@@ -162,7 +169,7 @@ class InternalMigrator extends AbstractMigratorySupport
 
         final DbMigrator migrator = new DbMigrator(migratoryContext, migrationPlanner);
         final List<MigrationResult> results = migrator.migrate(options);
-        LOG.info("Migration successful in '%d' steps.", results.size());
+        LOG.info("Migration finished in '%d' steps, result is %s",  results.size(), MigrationResult.determineMigrationState(results));
         return results;
     }
 }

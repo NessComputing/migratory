@@ -99,7 +99,7 @@ public class DbMigrator
                 migrationResults.add(new MigrationResult(migrationState, migrationPlanner.getDirection(), executionTime, migration));
             }
 
-            if (migrationState == MigrationState.FAIL) {
+            if (migrationState != MigrationState.OK) {
                 break; // Don't do any further migrations
             }
         }

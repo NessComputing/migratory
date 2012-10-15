@@ -15,6 +15,8 @@
  */
 package com.nesscomputing.migratory.migration;
 
+import java.util.List;
+
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
 
 
@@ -24,7 +26,7 @@ import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection
 public class MigrationResult
 {
     public enum MigrationState {
-        OK, FAIL
+        OK, FAIL, UNKNOWN
     }
 
     private final MigrationState migrationState;
@@ -59,4 +61,13 @@ public class MigrationResult
     {
         return migration;
     }
+
+    public static final MigrationState determineMigrationState(final List<MigrationResult> migrationResults)
+    {
+        if (migrationResults == null || migrationResults.size() == 0) {
+            return MigrationState.UNKNOWN;
+        }
+        return migrationResults.get(migrationResults.size() - 1).getState();
+    }
+
 }

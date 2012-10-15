@@ -21,6 +21,7 @@
 <log4j:configuration>
 
   <appender name="MavenLogAppender" class="com.pyx4j.log4j.MavenLogAppender">
+    <param name="threshold" value="DEBUG" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern" value="%m" />
     </layout>
@@ -31,6 +32,15 @@
       <param name="ConversionPattern" value="%m%n" />
     </layout>
   </appender>
+
+    <appender name="ERROR" class="org.apache.log4j.ConsoleAppender">
+    <param name="threshold" value="WARN" />
+    <param name="target" value="System.err" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%m%n" />
+    </layout>
+  </appender>
+
 
   <logger name="console">
     <param name="additivity" value="false" />
@@ -43,8 +53,8 @@
   </logger>
 
   <root>
-    <level value="debug" />
     <appender-ref ref="MavenLogAppender" />
+    <appender-ref ref="ERROR" />
   </root>
 
 </log4j:configuration>

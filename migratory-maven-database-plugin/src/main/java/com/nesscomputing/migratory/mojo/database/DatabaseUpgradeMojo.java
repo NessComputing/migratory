@@ -28,7 +28,9 @@ import org.skife.jdbi.v2.DBI;
 import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
+import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlan;
+import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
 import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
 
@@ -82,7 +84,13 @@ public class DatabaseUpgradeMojo extends AbstractDatabaseMojo
 
                     Migratory migratory = new Migratory(migratoryConfig, dbi, rootDbDbi);
                     migratory.addLocator(new MojoLocator(migratory, manifestUrl));
-                    migratory.dbMigrate(rootMigrationPlan, optionList);
+                    final Map<String, List<MetadataInfo>> results = migratory.dbMigrate(rootMigrationPlan, optionList);
+                    for (Map.Entry<String, List<MetadataInfo>> entry : results.entrySet()) {
+                        final MigrationState state = MetadataInfo.determineMigrationState(entry.getValue());
+                        if (state != MigrationState.OK) {
+                            throw new MojoExecutionException(String.format("Migration of %s failed with %s!", entry.getKey(), state));
+                        }
+                    }
                 }
             }
             catch (MigratoryException me) {
