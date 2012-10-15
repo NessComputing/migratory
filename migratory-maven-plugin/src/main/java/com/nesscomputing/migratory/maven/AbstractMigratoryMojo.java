@@ -25,16 +25,15 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryOption;
 
 abstract class AbstractMigratoryMojo extends AbstractMojo
 {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractMigratoryMojo.class);
+    private static final Log CONSOLE = Log.forName("console");
 
     protected MigratoryOption [] optionList;
 
@@ -106,7 +105,7 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
             doExecute(migratory);
         }
         catch (Exception e) {
-            LOG.error("While executing Mojo {}: {}", this.getClass().getSimpleName(), e);
+            CONSOLE.errorDebug(e, "While executing Mojo %s", this.getClass().getSimpleName());
             throw new MojoExecutionException("Migratory Error: ", e);
         }
         finally {
@@ -184,14 +183,14 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
             migratoryOptions[i] = MigratoryOption.valueOf(optionList[i].toUpperCase(Locale.ENGLISH));
         }
 
-        LOG.debug("Parsed {} into {}", options, migratoryOptions);
+        CONSOLE.debug("Parsed %s into %s", options, migratoryOptions);
         return migratoryOptions;
     }
 
     protected List<String> parsePersonalities(final String personalityList)
     {
         final String [] personalities = StringUtils.stripAll(StringUtils.split(personalityList, ","));
-        LOG.debug("Found {} as personalities", personalities);
+        CONSOLE.debug("Found %s as personalities", ((Object []) personalities));
         return personalities == null ? null : Arrays.asList(personalities);
     }
 

@@ -18,13 +18,14 @@ package com.nesscomputing.migratory.dbsupport;
 
 import java.util.Collection;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 import com.nesscomputing.migratory.dbsupport.postgresql.PostgreSQLSqlScript;
 import com.nesscomputing.migratory.migration.sql.SqlScript;
 import com.nesscomputing.migratory.migration.sql.SqlStatement;

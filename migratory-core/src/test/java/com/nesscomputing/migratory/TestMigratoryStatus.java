@@ -20,13 +20,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 
-import com.google.common.collect.ImmutableList;
-import com.nesscomputing.migratory.StatusResult;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlan;
 import com.nesscomputing.migratory.support.TestClasspathLocator;

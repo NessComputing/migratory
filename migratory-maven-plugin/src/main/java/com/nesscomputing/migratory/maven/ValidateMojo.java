@@ -19,9 +19,7 @@ package com.nesscomputing.migratory.maven;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.validation.ValidationResult;
@@ -37,7 +35,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class ValidateMojo extends AbstractMigratoryMojo
 {
-    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
+    private static final Log CONSOLE = Log.forName("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
         "+---------------------+--------------------+--------------------------------+",
@@ -72,7 +70,7 @@ public class ValidateMojo extends AbstractMigratoryMojo
         final FormatInfo formatInfo = SHORT;
 
         CONSOLE.info(formatInfo.getFrame());
-        CONSOLE.info(String.format(formatInfo.getName(), personality, result.getValidationStatus()));
+        CONSOLE.info(formatInfo.getName(), personality, result.getValidationStatus());
         CONSOLE.info(formatInfo.getFrame());
         final List<ValidationResultProblem> problems = result.getProblems();
         if (!problems.isEmpty()) {

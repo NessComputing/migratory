@@ -20,11 +20,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 
+import com.google.common.collect.ImmutableList;
+
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 
-import com.google.common.collect.ImmutableList;
 import com.nesscomputing.migratory.dbsupport.DbSupport;
 import com.nesscomputing.migratory.migration.sql.SqlScript;
 import com.nesscomputing.migratory.migration.sql.SqlStatement;

@@ -27,9 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.nesscomputing.migratory.migration.sql.SqlScript;
-import com.nesscomputing.migratory.migration.sql.SqlStatement;
-
 /**
  * Test for SqlScript.
  */

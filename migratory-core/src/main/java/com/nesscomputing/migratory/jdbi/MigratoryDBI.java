@@ -17,6 +17,8 @@ package com.nesscomputing.migratory.jdbi;
 
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
 import org.skife.jdbi.v2.TransactionCallback;
@@ -24,8 +26,6 @@ import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.TransactionStatus;
 import org.skife.jdbi.v2.exceptions.CallbackFailedException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
-
-import com.google.common.collect.Maps;
 
 public class MigratoryDBI implements IDBI
 {

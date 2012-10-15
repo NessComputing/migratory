@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.nesscomputing</groupId>
     <artifactId>ness-oss-parent</artifactId>
-    <version>17</version>
+    <version>20</version>
   </parent>
 
   <groupId>com.nesscomputing.migratory</groupId>
@@ -98,12 +98,6 @@
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht-jdk1.5</artifactId>
         <version>0.7.3</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
-        <version>1.6.6</version>
       </dependency>
 
       <dependency>

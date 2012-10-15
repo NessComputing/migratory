@@ -27,8 +27,6 @@ import org.skife.jdbi.v2.DBI;
 
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;
-import com.nesscomputing.migratory.metadata.MetadataInfo;
-import com.nesscomputing.migratory.metadata.MetadataManager;
 import com.nesscomputing.migratory.migration.MigrationPlan;
 import com.nesscomputing.migratory.support.TestClasspathLocator;
 

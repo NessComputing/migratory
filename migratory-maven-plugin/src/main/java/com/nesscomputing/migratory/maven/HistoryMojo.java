@@ -21,9 +21,8 @@ import java.util.Map;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
@@ -40,7 +39,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class HistoryMojo extends AbstractMigratoryMojo
 {
-    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
+    private static final Log CONSOLE = Log.forName("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
        "+-----------+------+-------+-----+--------------------+---------------------+",
@@ -90,23 +89,22 @@ public class HistoryMojo extends AbstractMigratoryMojo
         final FormatInfo formatInfo = verbose ? VERBOSE : SHORT;
 
         CONSOLE.info(formatInfo.getFrame());
-        CONSOLE.info(String.format(formatInfo.getName(), personality));
+        CONSOLE.info(formatInfo.getName(), personality);
         CONSOLE.info(formatInfo.getFrame());
         CONSOLE.info(formatInfo.getHeader());
         CONSOLE.info(formatInfo.getFrame());
         for (MetadataInfo metadataInfo : info) {
-            CONSOLE.info(String.format(formatInfo.getFormat(),
-                                   metadataInfo.getStartVersion(),
-                                   metadataInfo.getEndVersion(),
-                                   metadataInfo.getType(),
-                                   metadataInfo.getState(),
-                                   shortDir(metadataInfo.getDirection()),
-                                   metadataInfo.getUser(),
-                                   DATE_FORMAT.print(metadataInfo.getCreated()),
-                                   metadataInfo.getExecutionTime(),
-                                   metadataInfo.getDescription(),
-                                   metadataInfo.getScriptName()
-                ));
+            CONSOLE.info(formatInfo.getFormat(),
+                         metadataInfo.getStartVersion(),
+                         metadataInfo.getEndVersion(),
+                         metadataInfo.getType(),
+                         metadataInfo.getState(),
+                         shortDir(metadataInfo.getDirection()),
+                         metadataInfo.getUser(),
+                         DATE_FORMAT.print(metadataInfo.getCreated()),
+                         metadataInfo.getExecutionTime(),
+                         metadataInfo.getDescription(),
+                         metadataInfo.getScriptName());
         }
         CONSOLE.info(formatInfo.getFrame());
     }

@@ -21,9 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.StatusResult;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
@@ -40,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class StatusMojo extends AbstractMigratoryMojo
 {
-    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
+    private static final Log CONSOLE = Log.forName("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
        "+--------------------------------+-------+------+-------+------+---------+-----+",
@@ -77,18 +75,17 @@ public class StatusMojo extends AbstractMigratoryMojo
         CONSOLE.info(formatInfo.getFrame());
 
         for (StatusResult result : results) {
-            CONSOLE.info(String.format(formatInfo.getFormat(),
-                                   result.getPersonalityName(),
-                                   result.getLastState(),
-                                   result.getCurrentVersion(),
-                                   // If the status code has no access to the available migrations (because there is
-                                   // no locator or loader, those will be MAX_VALUE for first and MIN_VALUE for last.
-                                   // In that case, ignore the output.
-                                   result.getFirstVersion() != Integer.MAX_VALUE ? Integer.toString(result.getFirstVersion()) : "",
-                                   result.getLastVersion() != Integer.MIN_VALUE ? Integer.toString(result.getLastVersion()) : "",
-                                   result.isMigrationPossible() ? "Y" : "N",
-                                   shortDir(result.getDirection())
-                ));
+            CONSOLE.info(formatInfo.getFormat(),
+                         result.getPersonalityName(),
+                         result.getLastState(),
+                         result.getCurrentVersion(),
+                         // If the status code has no access to the available migrations (because there is
+                         // no locator or loader, those will be MAX_VALUE for first and MIN_VALUE for last.
+                         // In that case, ignore the output.
+                         result.getFirstVersion() != Integer.MAX_VALUE ? Integer.toString(result.getFirstVersion()) : "",
+                         result.getLastVersion() != Integer.MIN_VALUE ? Integer.toString(result.getLastVersion()) : "",
+                         result.isMigrationPossible() ? "Y" : "N",
+                         shortDir(result.getDirection()));
         }
 
         CONSOLE.info(formatInfo.getFrame());

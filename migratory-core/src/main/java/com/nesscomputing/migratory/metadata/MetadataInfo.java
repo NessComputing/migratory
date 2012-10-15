@@ -27,10 +27,10 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import com.nesscomputing.migratory.jdbi.JdbiArguments;
 import com.nesscomputing.migratory.jdbi.JdbiMappers;
-import com.nesscomputing.migratory.migration.MigrationResult;
-import com.nesscomputing.migratory.migration.MigrationType;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
+import com.nesscomputing.migratory.migration.MigrationResult;
 import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
+import com.nesscomputing.migratory.migration.MigrationType;
 
 public class MetadataInfo
 {

@@ -17,12 +17,12 @@ package com.nesscomputing.migratory.maven;
 
 import java.net.URL;
 
+import com.google.common.base.Preconditions;
+import com.pyx4j.log4j.MavenLogAppender;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.apache.maven.plugin.AbstractMojo;
-
-import com.google.common.base.Preconditions;
-import com.pyx4j.log4j.MavenLogAppender;
 
 public final class ConfigureLog4j
 {

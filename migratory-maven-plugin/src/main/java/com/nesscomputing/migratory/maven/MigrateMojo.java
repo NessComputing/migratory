@@ -23,12 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.common.collect.Maps;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 
-import com.google.common.collect.Maps;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.locator.AbstractSqlResourceLocator;
