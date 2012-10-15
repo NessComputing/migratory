@@ -29,6 +29,8 @@ import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryOption;
+import com.nesscomputing.migratory.metadata.MetadataInfo;
+import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
 import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator;
 
@@ -166,7 +168,7 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
 
                 }
                 catch (DBIException de) {
-                    CONSOLE.warnDebug(de, "While creating %s", database);
+                    throw new MojoExecutionException(String.format("While creating %s", database), de);
                 }
 
                 try {
@@ -197,7 +199,7 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
                     }
                 }
                 catch (DBIException de) {
-                    CONSOLE.warnDebug(de, "While creating %s", database);
+                    throw new MojoExecutionException(String.format("While creating %s", database), de);
                 }
 
                 final boolean createSchema = config.getBoolean(getPropertyName("schema.create"), false);
@@ -223,7 +225,7 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
                         }
                     }
                     catch (DBIException de) {
-                        CONSOLE.warnDebug(de, "While creating schema %s", schemaName);
+                        throw new MojoExecutionException(String.format("While creating schema %s", schemaName), de);
                     }
 
                     final boolean enforceSchema = config.getBoolean(getPropertyName("schema.enforce"), false);
@@ -248,7 +250,7 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
                             }
                         }
                         catch (DBIException de) {
-                            CONSOLE.warnDebug(de, "While dropping public schema: %s", schemaName);
+                            throw new MojoExecutionException(String.format("While dropping public schema: %s", schemaName), de);
                         }
                     }
                 }
@@ -258,20 +260,27 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
 
 
                 try {
-                    CONSOLE.info("... initializing metadata ...");
-
                     // Finally metadata is created as the database owner connected to the database.
-
                     final DBI dbi = getDBIFor(database);
 
                     Migratory migratory = new Migratory(migratoryConfig, dbi);
-                    migratory.dbInit();
+                    final List<MetadataInfo> result = migratory.dbInit();
+                    if (result != null) {
+                        final MigrationState state = MetadataInfo.determineMigrationState(result);
+                        if (state != MigrationState.OK) {
+                            throw new MojoExecutionException(String.format("Could not initialize metadata, returned status %s", state));
+                        }
+                        CONSOLE.info("... initialized metadata ...");
+                    }
+                    else {
+                        CONSOLE.info("... metadata already exists...");
+                    }
                 }
                 catch (DBIException de) {
-                    CONSOLE.warnDebug(de, "While creating %s", database);
+                    throw new MojoExecutionException(String.format("While creating %s", database), de);
                 }
                 catch (MigratoryException me) {
-                    CONSOLE.warnDebug(me, "While creating %s", database);
+                    throw new MojoExecutionException(String.format("While creating %s", database), me);
                 }
             }
             CONSOLE.info("... done");
