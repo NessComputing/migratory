@@ -21,7 +21,6 @@ import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.nesscomputing.migratory.migration.MigrationPlan;
 import com.nesscomputing.migratory.migration.MigrationPlan.MigrationPlanEntry;
 
 public class TestMigrationPlan

@@ -20,13 +20,14 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 import com.nesscomputing.migratory.AbstractMigratoryTest;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;

@@ -22,14 +22,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Lists;
+
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.skife.config.CommonsConfigSource;
 import org.skife.config.ConfigurationObjectFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.tinyhttp.HttpFetcher;
 import com.nesscomputing.tinyhttp.ssl.SSLConfig;
@@ -39,7 +39,8 @@ import com.nesscomputing.tinyhttp.ssl.SSLConfig;
  */
 public class HttpLoader implements MigrationLoader
 {
-    private static final Logger LOG = LoggerFactory.getLogger(HttpLoader.class);
+    private static final Log LOG = Log.findLog();
+
 
     private final MigratoryConfig migratoryConfig;
     private final HttpFetcher httpFetcher;
@@ -76,7 +77,7 @@ public class HttpLoader implements MigrationLoader
             }
         }
         catch (IOException ioe) {
-            LOG.trace("... failed", ioe);
+            LOG.trace(ioe, "... failed");
         }
         return null;
     }

@@ -19,22 +19,22 @@ package com.nesscomputing.migratory.migration;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 
 public class MigrationPlanner
 {
-    private static final Logger LOG = LoggerFactory.getLogger(MigrationPlanner.class);
+    private static final Log LOG = Log.findLog();
 
     public enum MigrationDirection
     {
@@ -73,7 +73,7 @@ public class MigrationPlanner
             planned = true;
 
             final Map<String, Migration> availableMigrations = migrationManager.getMigrations();
-            LOG.debug("Found {} available migrations, building migration graph", availableMigrations.size());
+            LOG.debug("Found %d available migrations, building migration graph", availableMigrations.size());
 
             // build a graph with the available migrations, prefer longer hops over shorter
             final WeightedGraph<Integer, MigrationEdge> graph = new DirectedWeightedMultigraph<Integer, MigrationEdge>(new MigrationEdgeFactory());
@@ -104,7 +104,7 @@ public class MigrationPlanner
                 }
             }
 
-            LOG.debug("Smallest Vertice: {}, Largest Vertice: {}", firstVersion, lastVersion);
+            LOG.debug("Smallest Vertice: %d, Largest Vertice: %d", firstVersion, lastVersion);
 
             // find a way from "currentVersion" to "requestedVersion"
             // return the list

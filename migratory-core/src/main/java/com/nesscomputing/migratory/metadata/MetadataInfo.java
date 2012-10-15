@@ -18,6 +18,7 @@ package com.nesscomputing.migratory.metadata;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.DateTime;
@@ -27,10 +28,10 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import com.nesscomputing.migratory.jdbi.JdbiArguments;
 import com.nesscomputing.migratory.jdbi.JdbiMappers;
-import com.nesscomputing.migratory.migration.MigrationResult;
-import com.nesscomputing.migratory.migration.MigrationType;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
+import com.nesscomputing.migratory.migration.MigrationResult;
 import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
+import com.nesscomputing.migratory.migration.MigrationType;
 
 public class MetadataInfo
 {
@@ -263,4 +264,13 @@ public class MetadataInfo
         }
         return toString;
     }
+
+    public static final MigrationState determineMigrationState(final List<MetadataInfo> migrationResults)
+    {
+        if (migrationResults == null || migrationResults.size() == 0) {
+            return MigrationState.UNKNOWN;
+        }
+        return migrationResults.get(migrationResults.size() - 1).getState();
+    }
+
 }

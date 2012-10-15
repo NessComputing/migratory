@@ -21,12 +21,13 @@ import java.io.InputStreamReader;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Closeables;
+
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+
 import com.nesscomputing.tinyhttp.HttpContentConverter;
 
 /**

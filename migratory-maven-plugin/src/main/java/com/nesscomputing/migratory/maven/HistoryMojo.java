@@ -22,10 +22,13 @@ import java.util.Map;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Maven goal that shows the history (all applied migrations) of the database.
@@ -36,6 +39,8 @@ import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection
  */
 public class HistoryMojo extends AbstractMigratoryMojo
 {
+    private static final Log CONSOLE = Log.forName("console");
+
     private static final FormatInfo SHORT = new FormatInfo(
        "+-----------+------+-------+-----+--------------------+---------------------+",
        "| %-73s |\n",
@@ -56,12 +61,13 @@ public class HistoryMojo extends AbstractMigratoryMojo
     /**
      * @parameter expression="${verbose}"
      */
-    protected boolean verbose = false;
+    private boolean verbose = false;
 
     /**
      * @parameter expression="${personalities}"
      */
-    protected String personalities = null;
+    @SuppressFBWarnings("UWF_NULL_FIELD")
+    private String personalities = null;
 
     @Override
     protected void doExecute(Migratory migratory) throws Exception
@@ -82,27 +88,25 @@ public class HistoryMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = verbose ? VERBOSE : SHORT;
 
-        System.out.println(formatInfo.getFrame());
-        System.out.printf(formatInfo.getName(), personality);
-        System.out.println(formatInfo.getFrame());
-        System.out.println(formatInfo.getHeader());
-        System.out.println(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getName(), personality);
+        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info(formatInfo.getHeader());
+        CONSOLE.info(formatInfo.getFrame());
         for (MetadataInfo metadataInfo : info) {
-            System.out.printf(formatInfo.getFormat(),
-                              metadataInfo.getStartVersion(),
-                              metadataInfo.getEndVersion(),
-                              metadataInfo.getType(),
-                              metadataInfo.getState(),
-                              shortDir(metadataInfo.getDirection()),
-                              metadataInfo.getUser(),
-                              DATE_FORMAT.print(metadataInfo.getCreated()),
-                              metadataInfo.getExecutionTime(),
-                              metadataInfo.getDescription(),
-                              metadataInfo.getScriptName()
-                );
+            CONSOLE.info(formatInfo.getFormat(),
+                         metadataInfo.getStartVersion(),
+                         metadataInfo.getEndVersion(),
+                         metadataInfo.getType(),
+                         metadataInfo.getState(),
+                         shortDir(metadataInfo.getDirection()),
+                         metadataInfo.getUser(),
+                         DATE_FORMAT.print(metadataInfo.getCreated()),
+                         metadataInfo.getExecutionTime(),
+                         metadataInfo.getDescription(),
+                         metadataInfo.getScriptName());
         }
-        System.out.println(formatInfo.getFrame());
-        System.out.println();
+        CONSOLE.info(formatInfo.getFrame());
     }
 
     private static String shortDir(final MigrationDirection dir)

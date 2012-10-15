@@ -17,7 +17,6 @@ package com.nesscomputing.migratory.migration;
 
 import static org.junit.Assert.assertFalse;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.StatusResult;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
-import com.nesscomputing.migratory.migration.MigrationPlan;
 import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 import com.nesscomputing.migratory.support.TestClasspathLocator;
 

@@ -18,9 +18,6 @@ package com.nesscomputing.migratory;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.nesscomputing.migratory.ImmutableMigratoryDBIConfig;
-import com.nesscomputing.migratory.MigratoryDBIConfig;
-
 public class TestImmutableMigratoryDBIConfig
 {
     @Test

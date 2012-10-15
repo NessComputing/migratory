@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.nesscomputing.migratory</groupId>
+    <artifactId>migratory-parent</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.nesscomputing.mojo</groupId>
+  <artifactId>database-maven-plugin</artifactId>
+
+  <packaging>maven-plugin</packaging>
+  <name>${project.artifactId}</name>
+
+  <properties>
+    <ness.root.dir>${project.parent.basedir}</ness.root.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.nesscomputing.migratory</groupId>
+      <artifactId>migratory-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.mojo</groupId>
+      <artifactId>migratory-maven-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.components</groupId>
+      <artifactId>ness-logging</artifactId>
+    </dependency>
+
+    <!-- maven -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- 3rd party -->
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>stringtemplate</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.skife.config</groupId>
+      <artifactId>config-magic</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jdbi</groupId>
+      <artifactId>jdbi</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.nesscomputing.testing</groupId>
+      <artifactId>findbugs-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>help-mojo</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <configuration>
+          <excludeFilterFile>${project.basedir}/src/tools/findbugsExclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

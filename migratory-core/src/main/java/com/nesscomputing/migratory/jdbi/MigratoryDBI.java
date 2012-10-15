@@ -17,14 +17,15 @@ package com.nesscomputing.migratory.jdbi;
 
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
 import org.skife.jdbi.v2.TransactionCallback;
+import org.skife.jdbi.v2.TransactionIsolationLevel;
 import org.skife.jdbi.v2.TransactionStatus;
 import org.skife.jdbi.v2.exceptions.CallbackFailedException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
-
-import com.google.common.collect.Maps;
 
 public class MigratoryDBI implements IDBI
 {
@@ -84,6 +85,18 @@ public class MigratoryDBI implements IDBI
                     return callback.withHandle(augmentHandle(handle));
                 }
             });
+    }
+
+    @Override
+    public <ReturnType> ReturnType inTransaction(final TransactionIsolationLevel transactionIsolationLevel, final TransactionCallback<ReturnType> callback) throws CallbackFailedException
+    {
+        return delegate.inTransaction(transactionIsolationLevel, new TransactionCallback<ReturnType>() {
+            @Override
+            public ReturnType inTransaction(final Handle handle, final TransactionStatus transactionStatus) throws Exception
+            {
+                return callback.inTransaction(augmentHandle(handle), transactionStatus);
+            }
+        });
     }
 
     protected Handle augmentHandle(final Handle handle)

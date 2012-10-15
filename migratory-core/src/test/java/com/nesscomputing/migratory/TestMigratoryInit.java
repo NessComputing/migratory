@@ -22,9 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 
-import com.nesscomputing.migratory.Migratory;
-import com.nesscomputing.migratory.MigratoryConfig;
-import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 
 public class TestMigratoryInit extends AbstractMigratoryTest

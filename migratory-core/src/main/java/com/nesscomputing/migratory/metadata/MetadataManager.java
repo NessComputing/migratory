@@ -22,31 +22,31 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Maps.EntryTransformer;
+
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.Query;
 import org.skife.jdbi.v2.Update;
 import org.skife.jdbi.v2.exceptions.CallbackFailedException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Maps.EntryTransformer;
+import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.MigratoryException;
-import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.MigratoryException.Reason;
+import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.migration.DbMigrator;
 import com.nesscomputing.migratory.migration.MigrationManager;
 import com.nesscomputing.migratory.migration.MigrationPlanner;
-import com.nesscomputing.migratory.migration.MigrationResult;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
+import com.nesscomputing.migratory.migration.MigrationResult;
 
 public class MetadataManager
 {
-    private static final Logger LOG = LoggerFactory.getLogger(MetadataManager.class);
+    private static final Log LOG = Log.findLog();
 
     public static final String METADATA_MIGRATION_NAME = "migratory_metadata";
 
@@ -134,11 +134,11 @@ public class MetadataManager
 
                     final Update update = metadataInfo.bindToHandle(transactionHandle.createStatement(METADATA_PREFIX + "insert_metadata"));
                     final int count = update.execute();
-                    LOG.debug("{} rows changed by inserting {}.", count, metadataInfo);
+                    LOG.debug("%d rows changed by inserting %s.", count, metadataInfo);
                     results.add(metadataInfo);
                 }
             }
-            LOG.debug("Metadata Insert: {}", results.size());
+            LOG.debug("Metadata Insert: %d", results.size());
             return results;
         }
         finally {
@@ -150,9 +150,14 @@ public class MetadataManager
 
     public void rollback()
     {
-        transactionHandle.rollback();
-        transactionHandle.close();
-        transactionHandle = null;
+        if (transactionHandle == null) {
+            LOG.warn("Got a late rollback after commit/rollback. Ignoring!");
+        }
+        else {
+            transactionHandle.rollback();
+            transactionHandle.close();
+            transactionHandle = null;
+        }
     }
 
     public Map<String, List<MetadataInfo>> getHistory(final Collection<String> personalities, final MigratoryOption [] options)
