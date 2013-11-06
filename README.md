@@ -8,7 +8,7 @@ Acknowledgements
 ----------------
 
 This product owes a debt of gratitude to the Flyway project at
-http://code.google.com/p/flyway/. While looking through various
+https://github.com/flyway/flyway. While looking through various
 ways to replace our homebrewed tool for database migrations, this was
 the most promising one that got close to what we wanted (but did not
 include the independent personality management that we require). A lot
