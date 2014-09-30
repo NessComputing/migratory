@@ -19,14 +19,15 @@ package com.nesscomputing.migratory.maven;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.migration.MigrationPlanner.MigrationDirection;
+
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -39,7 +40,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class HistoryMojo extends AbstractMigratoryMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
        "+-----------+------+-------+-----+--------------------+---------------------+",
@@ -61,13 +62,13 @@ public class HistoryMojo extends AbstractMigratoryMojo
     /**
      * @parameter expression="${verbose}"
      */
-    private boolean verbose = false;
+    private final boolean verbose = false;
 
     /**
      * @parameter expression="${personalities}"
      */
     @SuppressFBWarnings("UWF_NULL_FIELD")
-    private String personalities = null;
+    private final String personalities = null;
 
     @Override
     protected void doExecute(Migratory migratory) throws Exception
@@ -88,13 +89,13 @@ public class HistoryMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = verbose ? VERBOSE : SHORT;
 
-        CONSOLE.info(formatInfo.getFrame());
-        CONSOLE.info(formatInfo.getName(), personality);
-        CONSOLE.info(formatInfo.getFrame());
-        CONSOLE.info(formatInfo.getHeader());
-        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info("{}", formatInfo.getFrame());
+        CONSOLE.info("{}", String.format(formatInfo.getName(), personality));
+        CONSOLE.info("{}", formatInfo.getFrame());
+        CONSOLE.info("{}", formatInfo.getHeader());
+        CONSOLE.info("{}", formatInfo.getFrame());
         for (MetadataInfo metadataInfo : info) {
-            CONSOLE.info(formatInfo.getFormat(),
+            CONSOLE.info("{}", String.format(formatInfo.getFormat(),
                          metadataInfo.getStartVersion(),
                          metadataInfo.getEndVersion(),
                          metadataInfo.getType(),
@@ -104,9 +105,9 @@ public class HistoryMojo extends AbstractMigratoryMojo
                          DATE_FORMAT.print(metadataInfo.getCreated()),
                          metadataInfo.getExecutionTime(),
                          metadataInfo.getDescription(),
-                         metadataInfo.getScriptName());
+                         metadataInfo.getScriptName()));
         }
-        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info("{}", formatInfo.getFrame());
     }
 
     private static String shortDir(final MigrationDirection dir)

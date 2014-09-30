@@ -15,12 +15,10 @@
  */
 package com.nesscomputing.migratory.locator;
 
-
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
@@ -28,9 +26,12 @@ import com.nesscomputing.migratory.loader.LoaderManager;
 import com.nesscomputing.migratory.migration.Migration;
 import com.nesscomputing.migratory.migration.sql.SqlMigration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class AbstractSqlResourceLocator implements MigrationLocator
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractSqlResourceLocator.class);
 
     protected final MigratoryContext migratoryContext;
     protected final LoaderManager loaderManager;
@@ -48,7 +49,7 @@ public abstract class AbstractSqlResourceLocator implements MigrationLocator
 
         if (baseInformation != null) {
             final URI baseUri = baseInformation.getKey();
-            LOG.debug("Loading migrations from %s.", baseUri);
+            LOG.debug("Loading migrations from {}.", baseUri);
 
             final Collection<URI> uris = loaderManager.loadFolder(baseUri, baseInformation.getValue());
 

@@ -43,7 +43,7 @@ public class ClasspathLoader implements MigrationLoader
     @Override
     public boolean accept(final URI uri)
     {
-        return (uri != null) && "classpath".equals(uri.getScheme());
+        return uri != null && "classpath".equals(uri.getScheme());
     }
 
     @Override

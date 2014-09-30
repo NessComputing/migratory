@@ -24,8 +24,9 @@ import org.skife.jdbi.v2.exceptions.DBIException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.skife.jdbi.v2.tweak.StatementLocator;
 import org.skife.jdbi.v2.util.IntegerMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryOption;
@@ -45,7 +46,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class DatabaseCreateMojo extends AbstractDatabaseMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * @parameter expression="${databases}"
@@ -78,7 +79,7 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
             rootDbDbi.setStatementLocator(statementLocator);
 
             if (MigratoryOption.containsOption(MigratoryOption.DRY_RUN, optionList)) {
-                CONSOLE.info("Dry run for database %s activated!", database);
+                CONSOLE.info("Dry run for database {} activated!", database);
             }
             else {
                 // User and Database creation runs as root user connected to the root db
@@ -94,10 +95,10 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
                     });
 
                     if (userExists) {
-                        CONSOLE.info("... User %s already exists ...", user);
+                        CONSOLE.info("... User {} already exists ...", user);
                     }
                     else {
-                        CONSOLE.info("... creating User %s ...", user);
+                        CONSOLE.info("... creating User {} ...", user);
 
                         rootDbi.withHandle(new HandleCallback<Void>() {
                             @Override
@@ -123,10 +124,10 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
 
 
                     if (databaseExists) {
-                        CONSOLE.info("... Database %s already exists ...", database);
+                        CONSOLE.info("... Database {} already exists ...", database);
                     }
                     else {
-                        CONSOLE.info("... creating Database %s...", database);
+                        CONSOLE.info("... creating Database {}...", database);
 
                         final String tablespace;
 
@@ -145,7 +146,7 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
                                 tablespace = databaseConfig.getDBTablespace();
                             }
                             else {
-                                CONSOLE.warn("Tablespace '%s' does not exist, falling back to default!", databaseConfig.getDBTablespace());
+                                CONSOLE.warn("Tablespace '{}' does not exist, falling back to default!", databaseConfig.getDBTablespace());
                                 tablespace = null;
                             }
                         }
@@ -208,10 +209,10 @@ public class DatabaseCreateMojo extends AbstractDatabaseMojo
                     final String schemaName = databaseConfig.getDBUser();
                     try {
                         if (detectSchema(rootDbDbi, schemaName)) {
-                            CONSOLE.trace("Schema %s exists", schemaName);
+                            CONSOLE.trace("Schema {} exists", schemaName);
                         }
                         else {
-                            CONSOLE.info("... creating Schema %s ...", schemaName);
+                            CONSOLE.info("... creating Schema {} ...", schemaName);
 
                             rootDbDbi.withHandle(new HandleCallback<Void>() {
                                 @Override

@@ -15,20 +15,21 @@
  */
 package com.nesscomputing.migratory;
 
-
 import java.util.List;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.metadata.MetadataManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Initializes a given database. Ensures that the metadata table exists and has the latest available version.
  */
 class InternalInit extends AbstractMigratorySupport
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(InternalInit.class);
 
     private final MigratoryContext migratoryContext;
 
@@ -39,7 +40,7 @@ class InternalInit extends AbstractMigratorySupport
 
     List<MetadataInfo> init(final MigratoryOption [] options)
     {
-        LOG.debug("Running init(%s)", String.valueOf(options));
+        LOG.debug("Running init({})", String.valueOf(options));
         if (migratoryContext.getConfig().isReadOnly()) {
             throw new MigratoryException(Reason.IS_READONLY);
         }

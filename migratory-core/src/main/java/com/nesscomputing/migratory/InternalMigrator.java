@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
-
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.metadata.MetadataManager;
@@ -37,9 +35,12 @@ import com.nesscomputing.migratory.validation.DbValidator;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationStatus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class InternalMigrator extends AbstractMigratorySupport
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(InternalMigrator.class);
 
     private final MigratoryContext migratoryContext;
     private final MigratoryConfig migratoryConfig;
@@ -145,7 +146,7 @@ class InternalMigrator extends AbstractMigratorySupport
 
         migrationPlanner.plan();
 
-        LOG.info(migrationPlanner.toString());
+        LOG.info("{}", migrationPlanner.toString());
         switch(migrationPlanner.getDirection()) {
         case FORWARD:
             if (!migratoryConfig.isAllowRollForward()) {
@@ -163,13 +164,13 @@ class InternalMigrator extends AbstractMigratorySupport
             return null;
 
         default:
-            LOG.warn("Encountered State %s. This should never happen!", migrationPlanner.getDirection());
+            LOG.warn("Encountered State {}. This should never happen!", migrationPlanner.getDirection());
             return null;
         }
 
         final DbMigrator migrator = new DbMigrator(migratoryContext, migrationPlanner);
         final List<MigrationResult> results = migrator.migrate(options);
-        LOG.info("Migration finished in '%d' steps, result is %s",  results.size(), MigrationResult.determineMigrationState(results));
+        LOG.info("Migration finished in '{}' steps, result is {}",  results.size(), MigrationResult.determineMigrationState(results));
         return results;
     }
 }

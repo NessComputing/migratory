@@ -27,14 +27,15 @@ import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 
 public class MigrationPlanner
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(MigrationPlanner.class);
 
     public enum MigrationDirection
     {
@@ -73,7 +74,7 @@ public class MigrationPlanner
             planned = true;
 
             final Map<String, Migration> availableMigrations = migrationManager.getMigrations();
-            LOG.debug("Found %d available migrations, building migration graph", availableMigrations.size());
+            LOG.debug("Found {} available migrations, building migration graph", availableMigrations.size());
 
             // build a graph with the available migrations, prefer longer hops over shorter
             final WeightedGraph<Integer, MigrationEdge> graph = new DirectedWeightedMultigraph<Integer, MigrationEdge>(new MigrationEdgeFactory());
@@ -104,7 +105,7 @@ public class MigrationPlanner
                 }
             }
 
-            LOG.debug("Smallest Vertice: %d, Largest Vertice: %d", firstVersion, lastVersion);
+            LOG.debug("Smallest Vertice: {}, Largest Vertice: {}", firstVersion, lastVersion);
 
             // find a way from "currentVersion" to "requestedVersion"
             // return the list
@@ -211,7 +212,7 @@ public class MigrationPlanner
             return String.format("Personality '%s' needs no migration, already at %d (Range: %d - %d)", personalityName, targetVersion, firstVersion, lastVersion);
         }
         else {
-            return String.format("Personality '%s' migrates %s from %d to %d (Range: %d - %d)", personalityName, (md == MigrationDirection.FORWARD ? "forward" : "backward"), currentVersion, targetVersion, firstVersion, lastVersion);
+            return String.format("Personality '%s' migrates %s from %d to %d (Range: %d - %d)", personalityName, md == MigrationDirection.FORWARD ? "forward" : "backward", currentVersion, targetVersion, firstVersion, lastVersion);
 
         }
     }

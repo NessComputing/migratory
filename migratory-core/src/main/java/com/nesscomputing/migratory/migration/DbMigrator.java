@@ -25,8 +25,9 @@ import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
 import org.skife.jdbi.v2.TransactionCallback;
 import org.skife.jdbi.v2.TransactionStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.metadata.MetadataManager;
@@ -35,7 +36,7 @@ import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 
 public class DbMigrator
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(DbMigrator.class);
 
     private final MigratoryContext migratoryContext;
     private final MigrationPlanner migrationPlanner;
@@ -51,7 +52,7 @@ public class DbMigrator
         final List<MigrationResult> migrationResults = Lists.newArrayList();
 
         for(final Migration migration : migrationPlanner.getPlannedMigrations()) {
-            LOG.debug("Executing '%s'", migration);
+            LOG.debug("Executing '{}'", migration);
 
             MigrationState migrationState = null;
 
@@ -88,7 +89,7 @@ public class DbMigrator
             }
             catch (Exception e) {
                 migrationState = MigrationState.FAIL;
-                LOG.warnDebug(e, "Migration failed:");
+                LOG.warn("Migration failed:", e);
             }
             finally {
                 stopWatch.stop();

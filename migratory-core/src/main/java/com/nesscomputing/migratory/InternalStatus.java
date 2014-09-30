@@ -22,8 +22,6 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.metadata.MetadataManager;
@@ -31,9 +29,12 @@ import com.nesscomputing.migratory.migration.MigrationManager;
 import com.nesscomputing.migratory.migration.MigrationPlanner;
 import com.nesscomputing.migratory.migration.MigrationResult.MigrationState;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class InternalStatus extends AbstractMigratorySupport
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(InternalStatus.class);
 
     private final MigratoryContext migratoryContext;
 
@@ -44,7 +45,7 @@ class InternalStatus extends AbstractMigratorySupport
 
     Map<String, StatusResult> status(final Collection<String> personalities, final MigratoryOption ... options)
     {
-        LOG.debug("Running status(%s, %s)", personalities, options);
+        LOG.debug("Running status({}, {})", personalities, options);
 
             Map<String, StatusResult> results = Maps.newTreeMap();
 

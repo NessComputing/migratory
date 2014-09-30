@@ -56,7 +56,7 @@ public class FileLoader implements MigrationLoader
     @Override
     public boolean accept(final URI uri)
     {
-        return (uri != null) && "file".equals(uri.getScheme());
+        return uri != null && "file".equals(uri.getScheme());
     }
 
     @Override

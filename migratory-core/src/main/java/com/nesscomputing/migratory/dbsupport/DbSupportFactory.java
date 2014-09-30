@@ -27,8 +27,9 @@ import com.google.common.collect.Maps;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.IDBI;
 import org.skife.jdbi.v2.tweak.HandleCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.dbsupport.h2.H2DbSupport;
@@ -40,7 +41,7 @@ import com.nesscomputing.migratory.dbsupport.postgresql.PostgreSQLDbSupport;
  */
 public class DbSupportFactory
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(DbSupportFactory.class);
 
     private final Map<String, Class<? extends DbSupport>> supportedDatabases;
 
@@ -72,7 +73,7 @@ public class DbSupportFactory
             throw new MigratoryException(Reason.DATABASE, "Database %s is not supported!", databaseProductname);
         }
 
-        LOG.trace("Retrieved %s for %s", dbSupportClazz.getCanonicalName(), databaseProductname);
+        LOG.trace("Retrieved {} for {}", dbSupportClazz.getCanonicalName(), databaseProductname);
 
         try {
             final Constructor<? extends DbSupport> c = dbSupportClazz.getConstructor(IDBI.class);
@@ -101,6 +102,6 @@ public class DbSupportFactory
     public void addDbSupport(final String dbName, final Class<? extends DbSupport> dbSupportClazz)
     {
         supportedDatabases.put(dbName, dbSupportClazz);
-        LOG.debug("Registered %s for %s", dbSupportClazz.getCanonicalName(), dbName);
+        LOG.debug("Registered {} for {}", dbSupportClazz.getCanonicalName(), dbName);
     }
 }

@@ -26,13 +26,14 @@ import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.apache.commons.lang3.StringUtils;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.StatementLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.loader.LoaderManager;
 
 public class TemplatingStatementLocator implements StatementLocator
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(TemplatingStatementLocator.class);
 
     private final LoaderManager loaderManager;
     private final String prefix;
@@ -56,7 +57,7 @@ public class TemplatingStatementLocator implements StatementLocator
 
             final String location = prefix + statementNames[0] + ".st";
 
-            LOG.trace("Loading SQL: %s", location);
+            LOG.trace("Loading SQL: {}", location);
             final URL locationUrl = Resources.getResource(this.getClass(), location);
 
             if (locationUrl == null) {
@@ -69,18 +70,18 @@ public class TemplatingStatementLocator implements StatementLocator
                 template.setAttributes(context.getAttributes());
                 final String sql = template.toString();
 
-                LOG.trace("SQL: %s", sql);
+                LOG.trace("SQL: {}", sql);
                 return sql;
             }
             else {
                 final StringTemplateGroup group = new StringTemplateGroup(new StringReader(contents), AngleBracketTemplateLexer.class);
-                LOG.trace("Found %s in %s", group.getTemplateNames(), locationUrl);
+                LOG.trace("Found {} in {}", group.getTemplateNames(), locationUrl);
 
                 final StringTemplate template = group.getInstanceOf(statementNames[1]);
                 template.setAttributes(context.getAttributes());
                 final String sql = template.toString();
 
-                LOG.trace("SQL: %s", sql);
+                LOG.trace("SQL: {}", sql);
                 return sql;
             }
         }

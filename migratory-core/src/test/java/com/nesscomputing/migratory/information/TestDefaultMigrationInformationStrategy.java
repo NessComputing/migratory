@@ -18,13 +18,11 @@ package com.nesscomputing.migratory.information;
 
 import java.io.File;
 
+import com.nesscomputing.migratory.MigratoryException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.nesscomputing.migratory.MigratoryException;
-import com.nesscomputing.testing.lessio.AllowLocalFileAccess;
-
-@AllowLocalFileAccess(paths="%TMP_DIR%")
 public class TestDefaultMigrationInformationStrategy
 {
     private final MigrationInformationStrategy strategy = new DefaultMigrationInformationStrategy();

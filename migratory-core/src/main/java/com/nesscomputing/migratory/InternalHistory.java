@@ -20,13 +20,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
 import com.nesscomputing.migratory.metadata.MetadataManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class InternalHistory extends AbstractMigratorySupport
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(InternalHistory.class);
 
     private final MigratoryContext migratoryContext;
 
@@ -37,7 +39,7 @@ class InternalHistory extends AbstractMigratorySupport
 
     Map<String, List<MetadataInfo>> history(final Collection<String> personalities, final MigratoryOption [] options)
     {
-        LOG.debug("Running history(%s)", personalities);
+        LOG.debug("Running history({})", personalities);
 
         final MetadataManager manager = new MetadataManager(migratoryContext);
         try {

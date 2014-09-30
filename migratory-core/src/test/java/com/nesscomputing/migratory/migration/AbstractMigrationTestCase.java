@@ -40,12 +40,10 @@ import com.nesscomputing.migratory.support.TestFileLocator;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultProblem;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationStatus;
-import com.nesscomputing.testing.lessio.AllowLocalFileAccess;
 
 /**
  * Test to demonstrate the migration functionality.
  */
-@AllowLocalFileAccess(paths="%TMP_DIR%")
 public abstract class AbstractMigrationTestCase extends AbstractMigratoryTest
 {
     public static final String PERSONALITY_NAME = "test";

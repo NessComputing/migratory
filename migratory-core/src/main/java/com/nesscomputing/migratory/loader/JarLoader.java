@@ -47,7 +47,7 @@ public class JarLoader implements MigrationLoader
     @Override
     public boolean accept(final URI uri)
     {
-        return (uri != null) && "jar".equals(uri.getScheme());
+        return uri != null && "jar".equals(uri.getScheme());
     }
 
     @Override
@@ -75,7 +75,7 @@ public class JarLoader implements MigrationLoader
                         entryName = entryName.substring(locationPath.length() + 1);
                         int checkSubdir = entryName.indexOf("/");
                         // Skip Directories
-                        if ((!entryName.isEmpty() && checkSubdir < 0) && (pattern == null || pattern.matcher(entryName).matches())) {
+                        if ((!entryName.isEmpty() && checkSubdir < 0) && (pattern == null || pattern.matcher(entryName).matches())) { // NOPMD
                             results.add(URI.create(basePath + entry.getName()));
                         }
                     }

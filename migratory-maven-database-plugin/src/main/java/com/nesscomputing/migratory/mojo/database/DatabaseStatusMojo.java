@@ -21,8 +21,9 @@ import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.StatusResult;
@@ -40,7 +41,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class DatabaseStatusMojo extends AbstractDatabaseMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * @parameter expression="${databases}" default-value="all"
@@ -57,9 +58,9 @@ public class DatabaseStatusMojo extends AbstractDatabaseMojo
             throw new MojoExecutionException("No permission to run this task!");
         }
 
-        CONSOLE.info(FRAME);
-        CONSOLE.info(HEADER);
-        CONSOLE.info(FRAME);
+        CONSOLE.info("{}", FRAME);
+        CONSOLE.info("{}", HEADER);
+        CONSOLE.info("{}", FRAME);
 
         for (String database : databaseList) {
 
@@ -75,13 +76,13 @@ public class DatabaseStatusMojo extends AbstractDatabaseMojo
                 final Map<String, StatusResult> results = migratory.dbStatus(availableMigrations.keySet(), optionList);
 
                 dump(database, results.values());
-                CONSOLE.info(FRAME);
+                CONSOLE.info("{}", FRAME);
             }
             catch (MigratoryException me) {
-                CONSOLE.warnDebug(me, "While getting status for %s", database);
+                CONSOLE.warn("While getting status for {}", database, me);
             }
             catch (RuntimeException re) {
-                CONSOLE.warnDebug(re, "While getting status for %s", database);
+                CONSOLE.warn("While getting status for {}", database, re);
             }
         }
     }
@@ -97,7 +98,7 @@ public class DatabaseStatusMojo extends AbstractDatabaseMojo
         }
 
         for (StatusResult result : results) {
-            CONSOLE.info(String.format(BODY,
+            CONSOLE.info("{}", String.format(BODY,
                               database,
                               result.getPersonalityName(),
                               result.getLastState(),

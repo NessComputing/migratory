@@ -45,12 +45,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.skife.config.CommonsConfigSource;
 import org.skife.config.ConfigurationObjectFactory;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.loader.FileLoader;
-import com.nesscomputing.migratory.loader.HttpLoader;
 import com.nesscomputing.migratory.loader.JarLoader;
 import com.nesscomputing.migratory.loader.LoaderManager;
 import com.nesscomputing.migratory.maven.ConfigureLog4j;
@@ -67,7 +67,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
     public static final String MIGRATORY_PROPERTIES_FILE = ".migratory.properties";
 
 
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDatabaseMojo.class);
 
     private ConfigurationObjectFactory factory;
 
@@ -154,8 +154,8 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
                 throw new MojoExecutionException("no manifest name found (did you create a .migratory.properties file?)");
             }
 
-            LOG.debug("Manifest URL:      %s", manifestUrl);
-            LOG.debug("Manifest Name:     %s", manifestName);
+            LOG.debug("Manifest URL:      {}", manifestUrl);
+            LOG.debug("Manifest Name:     {}", manifestName);
 
             this.optionList = parseOptions(options);
 
@@ -170,7 +170,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             location.append(manifestName);
             location.append(".manifest");
 
-            LOG.debug("Manifest Location: %s", location);
+            LOG.debug("Manifest Location: {}", location);
 
             final MigratoryConfig initialMigratoryConfig = initialConfigFactory.build(MigratoryConfig.class);
             final LoaderManager initialLoaderManager = createLoaderManager(initialMigratoryConfig);
@@ -197,7 +197,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             this.migratoryConfig = factory.build(MigratoryConfig.class);
             this.loaderManager = createLoaderManager(migratoryConfig);
 
-            LOG.debug("Configuration: %s", this.config);
+            LOG.debug("Configuration: {}", this.config);
 
             this.rootDBIConfig = getDBIConfig(getPropertyName("default.root_"));
 
@@ -208,7 +208,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         catch (Exception e) {
             Throwables.propagateIfInstanceOf(e, MojoExecutionException.class);
 
-            LOG.errorDebug(e, "While executing Mojo %s", this.getClass().getSimpleName());
+            LOG.error("While executing Mojo {}", this.getClass().getSimpleName(), e);
             throw new MojoExecutionException("Failure:" ,e);
         }
         finally {
@@ -333,7 +333,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
             migratoryOptions[i] = MigratoryOption.valueOf(optionList[i].toUpperCase(Locale.ENGLISH));
         }
 
-        LOG.debug("Parsed %s into %s", options, migratoryOptions);
+        LOG.debug("Parsed {} into {}", options, migratoryOptions);
         return migratoryOptions;
     }
 
@@ -395,7 +395,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         for (String mustExist : MUST_EXIST) {
             final String propertyName = getPropertyName(mustExist);
             if (!config.containsKey(propertyName)) {
-                LOG.error("The required property '%s' does not exist in the manifest.", propertyName);
+                LOG.error("The required property '{}' does not exist in the manifest.", propertyName);
                 valid = false;
             }
         }
@@ -403,7 +403,7 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         for (String mustNotBeEmpty : MUST_NOT_BE_EMPTY) {
             final String propertyName = getPropertyName(mustNotBeEmpty);
             if (StringUtils.isBlank(config.getString(propertyName, null))) {
-                LOG.error("The property '%s' must not be empty.", propertyName);
+                LOG.error("The property '{}' must not be empty.", propertyName);
                 valid = false;
             }
         }
@@ -422,7 +422,6 @@ public abstract class AbstractDatabaseMojo extends AbstractMojo
         final LoaderManager loaderManager = new LoaderManager();
         loaderManager.addLoader(new FileLoader(Charsets.UTF_8));
         loaderManager.addLoader(new JarLoader(Charsets.UTF_8));
-        loaderManager.addLoader(new HttpLoader(migratoryConfig));
 
         return loaderManager;
     }

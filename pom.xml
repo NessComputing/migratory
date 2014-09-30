@@ -58,18 +58,6 @@
         <version>${project.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-tinyhttp</artifactId>
-        <version>1.1.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.nesscomputing.components</groupId>
-        <artifactId>ness-logging</artifactId>
-        <version>1.1.0</version>
-      </dependency>
-
       <!-- 3rd party -->
       <dependency>
         <groupId>org.jdbi</groupId>

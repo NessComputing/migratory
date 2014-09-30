@@ -31,8 +31,9 @@ import org.skife.jdbi.v2.Query;
 import org.skife.jdbi.v2.Update;
 import org.skife.jdbi.v2.exceptions.CallbackFailedException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryContext;
 import com.nesscomputing.migratory.MigratoryException;
@@ -46,7 +47,7 @@ import com.nesscomputing.migratory.migration.MigrationResult;
 
 public class MetadataManager
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(MetadataManager.class);
 
     public static final String METADATA_MIGRATION_NAME = "migratory_metadata";
 
@@ -134,11 +135,11 @@ public class MetadataManager
 
                     final Update update = metadataInfo.bindToHandle(transactionHandle.createStatement(METADATA_PREFIX + "insert_metadata"));
                     final int count = update.execute();
-                    LOG.debug("%d rows changed by inserting %s.", count, metadataInfo);
+                    LOG.debug("{} rows changed by inserting {}.", count, metadataInfo);
                     results.add(metadataInfo);
                 }
             }
-            LOG.debug("Metadata Insert: %d", results.size());
+            LOG.debug("Metadata Insert: {}", results.size());
             return results;
         }
         finally {

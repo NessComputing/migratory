@@ -29,12 +29,12 @@ import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.apache.commons.lang3.StringUtils;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.StatementLocator;
-
-import com.nesscomputing.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MigratoryStatementLocator implements StatementLocator
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(MigratoryStatementLocator.class);
 
     public static final String SQL_LOCATION = "/migratory/sql/";
 
@@ -57,7 +57,7 @@ public class MigratoryStatementLocator implements StatementLocator
         // This is a recorded statement that comes from some loader. This needs
         // to be preregistered using addTemplate, so look there.
         if (statementName.charAt(0) == '@') {
-            LOG.trace("Retrieving statement: %s", statementName);
+            LOG.trace("Retrieving statement: {}", statementName);
             final String rawSql = sql.get(statementName);
 
             if (rawSql == null) {
@@ -82,7 +82,7 @@ public class MigratoryStatementLocator implements StatementLocator
 
             final String sqlLocation = SQL_LOCATION + context.getAttribute("db_type") + "/" + statementNames[0] + ".st";
 
-            LOG.trace("Loading SQL: %s", sqlLocation);
+            LOG.trace("Loading SQL: {}", sqlLocation);
             final URL location = Resources.getResource(MigratoryStatementLocator.class, sqlLocation);
             if (location == null) {
                 throw new IllegalArgumentException("Location '" + sqlLocation + "' does not exist!");
@@ -95,13 +95,13 @@ public class MigratoryStatementLocator implements StatementLocator
             }
             else {
                 final StringTemplateGroup group = new StringTemplateGroup(new StringReader(rawSql), AngleBracketTemplateLexer.class);
-                LOG.trace("Found %s in %s", group.getTemplateNames(), location);
+                LOG.trace("Found {} in {}", group.getTemplateNames(), location);
 
                 final StringTemplate template = group.getInstanceOf(statementNames[1]);
                 template.setAttributes(context.getAttributes());
                 final String sql = template.toString();
 
-                LOG.trace("SQL: %s", sql);
+                LOG.trace("SQL: {}", sql);
                 return sql;
             }
         }
@@ -121,7 +121,7 @@ public class MigratoryStatementLocator implements StatementLocator
         template.setAttributes(context.getAttributes());
         final String sql = template.toString();
 
-        LOG.trace("SQL: %s", sql);
+        LOG.trace("SQL: {}", sql);
         return sql;
     }
 }

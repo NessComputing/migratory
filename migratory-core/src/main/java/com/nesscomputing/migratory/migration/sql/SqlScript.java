@@ -26,8 +26,9 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 
@@ -37,7 +38,7 @@ import com.nesscomputing.migratory.MigratoryException.Reason;
  */
 public class SqlScript
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(SqlScript.class);
 
     /**
      * The default Statement delimiter.
@@ -91,7 +92,7 @@ public class SqlScript
         {
             if (!inMultilineComment) {
                 if (isCommentDirective(line) || line.startsWith("--")) {
-                    LOG.trace("Ignored '%s'", line);
+                    LOG.trace("Ignored '{}'", line);
                     continue;
                 }
                 else if (line.contains("--")) {
@@ -99,7 +100,7 @@ public class SqlScript
                 }
                 else if (line.startsWith("/*")) {
                     inMultilineComment = true;
-                    LOG.trace("Start Multiline ignore at  '%s'", line);
+                    LOG.trace("Start Multiline ignore at  '{}'", line);
                     if (line.endsWith("*/")) {
                     	LOG.trace("...and then immediately ending it");
                     	inMultilineComment = false;
@@ -107,13 +108,13 @@ public class SqlScript
                     continue;
                 }
                 else {
-                    LOG.trace("Adding '%s' to output", line);
+                    LOG.trace("Adding '{}' to output", line);
                     lines.add(line);
                 }
             }
             else {
                 if (line.endsWith("*/")) {
-                    LOG.trace("Ending Multiline ignore at  '%s'", line);
+                    LOG.trace("Ending Multiline ignore at  '{}'", line);
                     inMultilineComment = false;
                 }
             }
@@ -155,7 +156,7 @@ public class SqlScript
                 // Trim off the delimiter at the end.
                 statementSql.setLength(statementSql.length() - delimiter.length());
                 statements.add(new SqlStatement(count++, StringUtils.trimToEmpty(statementSql.toString())));
-                LOG.debug("Found statement: %s", statementSql);
+                LOG.debug("Found statement: {}", statementSql);
 
                 if (!isDelimiterChangeExplicit()) {
                     delimiter = DEFAULT_STATEMENT_DELIMITER;

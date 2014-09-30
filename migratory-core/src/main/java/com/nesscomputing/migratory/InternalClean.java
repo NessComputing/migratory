@@ -22,15 +22,16 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.exceptions.DBIException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.migration.sql.SqlScript;
 import com.nesscomputing.migratory.migration.sql.SqlStatement;
 
 class InternalClean extends AbstractMigratorySupport
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(InternalClean.class);
 
     String schema = null;
 
@@ -72,7 +73,7 @@ class InternalClean extends AbstractMigratorySupport
                             }
                         }
                         catch (DBIException e) {
-                            LOG.warnDebug(e, "While executing %s", sqlStatement);
+                            LOG.warn("While executing {}", sqlStatement, e);
                         }
                     }
                     return 0;
@@ -86,7 +87,7 @@ class InternalClean extends AbstractMigratorySupport
             stopWatch.stop();
         }
 
-        LOG.info("Cleaned database schema '%s' (execution time %dms)", schema, stopWatch.getTime());
+        LOG.info("Cleaned database schema '{}' (execution time {}ms)", schema, stopWatch.getTime());
     }
 
     protected void setSchema(final String schema)

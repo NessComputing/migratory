@@ -44,7 +44,7 @@ public class MetadataLoader implements MigrationLoader
     @Override
     public boolean accept(final URI uri)
     {
-        return (uri != null) && "metadata".equals(uri.getScheme());
+        return uri != null && "metadata".equals(uri.getScheme());
     }
 
     @Override

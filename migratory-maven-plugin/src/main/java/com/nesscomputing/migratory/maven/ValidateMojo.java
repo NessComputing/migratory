@@ -19,11 +19,13 @@ package com.nesscomputing.migratory.maven;
 import java.util.List;
 import java.util.Map;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.maven.util.FormatInfo;
 import com.nesscomputing.migratory.validation.ValidationResult;
 import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultProblem;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -35,7 +37,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class ValidateMojo extends AbstractMigratoryMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     private static final FormatInfo SHORT = new FormatInfo(
         "+---------------------+--------------------+--------------------------------+",
@@ -69,18 +71,18 @@ public class ValidateMojo extends AbstractMigratoryMojo
 
         final FormatInfo formatInfo = SHORT;
 
-        CONSOLE.info(formatInfo.getFrame());
-        CONSOLE.info(formatInfo.getName(), personality, result.getValidationStatus());
-        CONSOLE.info(formatInfo.getFrame());
+        CONSOLE.info("{}", formatInfo.getFrame());
+        CONSOLE.info("{}", String.format(formatInfo.getName(), personality, result.getValidationStatus()));
+        CONSOLE.info("{}", formatInfo.getFrame());
         final List<ValidationResultProblem> problems = result.getProblems();
         if (!problems.isEmpty()) {
-            CONSOLE.info(formatInfo.getHeader());
-            CONSOLE.info(formatInfo.getFrame());
+            CONSOLE.info("{}", formatInfo.getHeader());
+            CONSOLE.info("{}", formatInfo.getFrame());
             for (ValidationResultProblem problem: problems) {
-                CONSOLE.info(formatInfo.getFormat(),
+                CONSOLE.info("{}", String.format(formatInfo.getFormat(),
                          problem.getValidationStatus(),
-                         problem.getReason());
-                CONSOLE.info(formatInfo.getFrame());
+                         problem.getReason()));
+                CONSOLE.info("{}", formatInfo.getFrame());
             }
         }
     }

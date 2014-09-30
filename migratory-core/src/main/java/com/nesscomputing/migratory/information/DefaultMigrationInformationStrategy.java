@@ -82,7 +82,7 @@ public class DefaultMigrationInformationStrategy implements MigrationInformation
                     throw new MigratoryException(Reason.INTERNAL, "Can not interpret '%s'!", fileName);
             }
 
-            final boolean needsRoot = (pieces.length == 4 && "root".equals(pieces[2].toLowerCase(Locale.ENGLISH)));
+            final boolean needsRoot = pieces.length == 4 && "root".equals(pieces[2].toLowerCase(Locale.ENGLISH));
 
             boolean template = false;
 

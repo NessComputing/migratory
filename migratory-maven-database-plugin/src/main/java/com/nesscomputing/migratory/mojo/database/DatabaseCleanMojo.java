@@ -19,8 +19,9 @@ import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
@@ -37,7 +38,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class DatabaseCleanMojo extends AbstractDatabaseMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * @parameter expression="${databases}"
@@ -57,7 +58,7 @@ public class DatabaseCleanMojo extends AbstractDatabaseMojo
         }
 
         for (String database : databaseList) {
-            CONSOLE.info("Cleaning Database %s...", database);
+            CONSOLE.info("Cleaning Database {}...", database);
 
             final DBIConfig databaseConfig = getDBIConfigFor(database);
             final DBI rootDbDbi = new DBI(databaseConfig.getDBUrl(), rootDBIConfig.getDBUser(), rootDBIConfig.getDBPassword());
@@ -68,10 +69,10 @@ public class DatabaseCleanMojo extends AbstractDatabaseMojo
                 migratory.dbClean(optionList);
             }
             catch (MigratoryException me) {
-                CONSOLE.warnDebug(me, "While cleaning %s", database);
+                CONSOLE.warn("While cleaning {}", database, me);
             }
             catch (RuntimeException re) {
-                CONSOLE.warnDebug(re, "While cleaning %s", database);
+                CONSOLE.warn("While cleaning {}", database, re);
             }
 
             CONSOLE.info("... done");

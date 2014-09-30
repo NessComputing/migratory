@@ -22,8 +22,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.metadata.MetadataInfo;
@@ -41,7 +42,7 @@ import com.nesscomputing.migratory.mojo.database.util.MojoLocator;
  */
 public class DatabaseHistoryMojo extends AbstractDatabaseMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     private static final DateTimeFormatter DATE_FORMAT = ISODateTimeFormat.dateHourMinuteSecond();
 
@@ -60,9 +61,9 @@ public class DatabaseHistoryMojo extends AbstractDatabaseMojo
             throw new MojoExecutionException("No permission to run this task!");
         }
 
-        CONSOLE.info(FRAME);
-        CONSOLE.info(HEADER);
-        CONSOLE.info(FRAME);
+        CONSOLE.info("{}", FRAME);
+        CONSOLE.info("{}", HEADER);
+        CONSOLE.info("{}", FRAME);
 
         for (String database : databaseList) {
 
@@ -78,13 +79,13 @@ public class DatabaseHistoryMojo extends AbstractDatabaseMojo
                 final Map<String, List<MetadataInfo>> results = migratory.dbHistory(availableMigrations.keySet(), optionList);
 
                 dump(database, results);
-                CONSOLE.info(FRAME);
+                CONSOLE.info("{}", FRAME);
             }
             catch (MigratoryException me) {
-                CONSOLE.warnDebug(me, "While getting history for %s", database);
+                CONSOLE.warn("While getting history for {}", database, me);
             }
             catch (RuntimeException re) {
-                CONSOLE.warnDebug(re, "While getting history for %s", database);
+                CONSOLE.warn("While getting history for {}", database, re);
             }
         }
     }
@@ -103,7 +104,7 @@ public class DatabaseHistoryMojo extends AbstractDatabaseMojo
             final String personalityName = result.getKey();
             for (final MetadataInfo info : result.getValue()) {
 
-                CONSOLE.info(String.format(BODY,
+                CONSOLE.info("{}", String.format(BODY,
                                        database,
                                        personalityName,
                                        info.getStartVersion(),

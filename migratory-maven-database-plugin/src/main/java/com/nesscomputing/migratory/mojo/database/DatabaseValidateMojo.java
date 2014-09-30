@@ -20,8 +20,9 @@ import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryException;
 import com.nesscomputing.migratory.mojo.database.util.DBIConfig;
@@ -39,7 +40,7 @@ import com.nesscomputing.migratory.validation.ValidationResult.ValidationResultP
  */
 public class DatabaseValidateMojo extends AbstractDatabaseMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * @parameter expression="${databases}" default-value="all"
@@ -56,9 +57,9 @@ public class DatabaseValidateMojo extends AbstractDatabaseMojo
             throw new MojoExecutionException("No permission to run this task!");
         }
 
-        CONSOLE.info(HEAD_FRAME);
-        CONSOLE.info(HEADER);
-        CONSOLE.info(HEAD_FRAME);
+        CONSOLE.info("{}", HEAD_FRAME);
+        CONSOLE.info("{}", HEADER);
+        CONSOLE.info("{}", HEAD_FRAME);
 
         for (String database : databaseList) {
 
@@ -74,13 +75,13 @@ public class DatabaseValidateMojo extends AbstractDatabaseMojo
                 final Map<String, ValidationResult> results = migratory.dbValidate(availableMigrations.keySet(), optionList);
 
                 dump(database, results);
-                CONSOLE.info(HEAD_FRAME);
+                CONSOLE.info("{}", HEAD_FRAME);
             }
             catch (MigratoryException me) {
-                CONSOLE.warnDebug(me, "While validating for %s", database);
+                CONSOLE.warn("While validating for {}", database, me);
             }
             catch (RuntimeException re) {
-                CONSOLE.warnDebug(re, "While validating for %s", database);
+                CONSOLE.warn("While validating for {}", database, re);
             }
         }
     }
@@ -106,25 +107,25 @@ public class DatabaseValidateMojo extends AbstractDatabaseMojo
 
             final List<ValidationResultProblem> problems = validationResult.getProblems();
             if (!problems.isEmpty()) {
-                CONSOLE.info(HEAD_FRAME);
+                CONSOLE.info("{}", HEAD_FRAME);
             }
 
-            CONSOLE.info(BODY,
+            CONSOLE.info("{}", String.format(BODY,
                          database,
                          personalityName,
-                         validationResult.getValidationStatus());
+                         validationResult.getValidationStatus()));
 
             if (!problems.isEmpty()) {
-                CONSOLE.info(FRAME);
-                CONSOLE.info(PROBLEM);
-                CONSOLE.info(PROB_FRAME);
+                CONSOLE.info("{}", FRAME);
+                CONSOLE.info("{}", PROBLEM);
+                CONSOLE.info("{}", PROB_FRAME);
                 for (ValidationResultProblem problem: problems) {
-                    CONSOLE.info(PROBLEM_BODY,
+                    CONSOLE.info("{}", String.format(PROBLEM_BODY,
                                  problem.getValidationStatus(),
                                  problem.getMetadataInfo().getScriptName(),
-                                 problem.getReason());
+                                 problem.getReason()));
                 }
-                CONSOLE.info(FRAME);
+                CONSOLE.info("{}", FRAME);
             }
         }
     }

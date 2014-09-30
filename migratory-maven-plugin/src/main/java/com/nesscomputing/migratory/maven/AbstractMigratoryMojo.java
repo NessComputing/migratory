@@ -25,15 +25,16 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.Migratory;
 import com.nesscomputing.migratory.MigratoryConfig;
 import com.nesscomputing.migratory.MigratoryOption;
 
 abstract class AbstractMigratoryMojo extends AbstractMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     protected MigratoryOption [] optionList;
 
@@ -105,7 +106,7 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
             doExecute(migratory);
         }
         catch (Exception e) {
-            CONSOLE.errorDebug(e, "While executing Mojo %s", this.getClass().getSimpleName());
+            CONSOLE.error("While executing Mojo {}", this.getClass().getSimpleName(), e);
             throw new MojoExecutionException("Migratory Error: ", e);
         }
         finally {
@@ -183,15 +184,16 @@ abstract class AbstractMigratoryMojo extends AbstractMojo
             migratoryOptions[i] = MigratoryOption.valueOf(optionList[i].toUpperCase(Locale.ENGLISH));
         }
 
-        CONSOLE.debug("Parsed %s into %s", options, migratoryOptions);
+        CONSOLE.debug("Parsed {} into {}", options, migratoryOptions);
         return migratoryOptions;
     }
 
     protected List<String> parsePersonalities(final String personalityList)
     {
         final String [] personalities = StringUtils.stripAll(StringUtils.split(personalityList, ","));
-        CONSOLE.debug("Found %s as personalities", ((Object []) personalities));
-        return personalities == null ? null : Arrays.asList(personalities);
+        final List<String> result = personalities == null ? null : Arrays.asList(personalities);
+        CONSOLE.debug("Found {} as personalities", result);
+        return result;
     }
 
 

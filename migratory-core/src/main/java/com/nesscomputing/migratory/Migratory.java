@@ -31,8 +31,9 @@ import org.skife.config.ConfigurationObjectFactory;
 import org.skife.config.SimplePropertyConfigSource;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.IDBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryException.Reason;
 import com.nesscomputing.migratory.dbsupport.DbSupport;
 import com.nesscomputing.migratory.dbsupport.DbSupportFactory;
@@ -41,7 +42,6 @@ import com.nesscomputing.migratory.information.MigrationInformationStrategy;
 import com.nesscomputing.migratory.jdbi.MigratoryDBI;
 import com.nesscomputing.migratory.loader.ClasspathLoader;
 import com.nesscomputing.migratory.loader.FileLoader;
-import com.nesscomputing.migratory.loader.HttpLoader;
 import com.nesscomputing.migratory.loader.JarLoader;
 import com.nesscomputing.migratory.loader.LoaderManager;
 import com.nesscomputing.migratory.loader.MetadataLoader;
@@ -60,7 +60,7 @@ import com.nesscomputing.migratory.validation.ValidationResult;
  */
 public class Migratory implements MigratoryContext
 {
-    private static final Log LOG = Log.findLog();
+    private static final Logger LOG = LoggerFactory.getLogger(Migratory.class);
 
     private final MigratoryConfig migratoryConfig;
     private final MigratoryDBI dbi;
@@ -127,7 +127,6 @@ public class Migratory implements MigratoryContext
             loaderManager.addLoader(new FileLoader(charset));
             loaderManager.addLoader(new JarLoader(charset));
             loaderManager.addLoader(new ClasspathLoader(loaderManager));
-            loaderManager.addLoader(new HttpLoader(migratoryConfig));
 
             this.dbSupport = dbSupportFactory.getDbSupport(dbi);
 
@@ -269,7 +268,7 @@ public class Migratory implements MigratoryContext
         }
 
         locators.add(locator);
-        LOG.debug("Added %s as migration locator.", locator);
+        LOG.debug("Added {} as migration locator.", locator);
         return this;
     }
 
@@ -280,7 +279,7 @@ public class Migratory implements MigratoryContext
         }
 
         loaderManager.addLoader(loader);
-        LOG.debug("Added %s as migration loader.", loader);
+        LOG.debug("Added {} as migration loader.", loader);
         return this;
     }
 
@@ -321,7 +320,7 @@ public class Migratory implements MigratoryContext
         if (StringUtils.isNotBlank(driver)) {
             try {
                 Class.forName(driver).newInstance();
-                LOG.debug("Loaded Driver '%s' successfully.", driver);
+                LOG.debug("Loaded Driver '{}' successfully.", driver);
             }
             catch (ClassNotFoundException cnfe) {
                 throw new MigratoryException(Reason.INIT, cnfe);
@@ -334,9 +333,9 @@ public class Migratory implements MigratoryContext
             }
         }
 
-        LOG.debug("Loading DBI, URL: %s, User: %s, Password: %s", dbiConfig.getDBUrl(),
+        LOG.debug("Loading DBI, URL: {}, User: {}, Password: {}", dbiConfig.getDBUrl(),
                                                                   dbiConfig.getDBUser(),
-                                                                  (dbiConfig.isRevealPassword() ? dbiConfig.getDBPassword() : "XXXXX"));
+                                                                  dbiConfig.isRevealPassword() ? dbiConfig.getDBPassword() : "XXXXX");
 
         return new DBI (dbiConfig.getDBUrl(), dbiConfig.getDBUser(), dbiConfig.getDBPassword());
     }

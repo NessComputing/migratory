@@ -24,8 +24,9 @@ import org.skife.jdbi.v2.exceptions.DBIException;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 import org.skife.jdbi.v2.tweak.StatementLocator;
 import org.skife.jdbi.v2.util.IntegerMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.nesscomputing.logging.Log;
 import com.nesscomputing.migratory.MigratoryOption;
 import com.nesscomputing.migratory.mojo.database.util.TemplatingStatementLocator;
 
@@ -41,7 +42,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  */
 public class DatabaseDropMojo extends AbstractDatabaseMojo
 {
-    private static final Log CONSOLE = Log.forName("console");
+    private static final Logger CONSOLE = LoggerFactory.getLogger("console");
 
     /**
      * @parameter expression="${databases}"
@@ -78,7 +79,7 @@ public class DatabaseDropMojo extends AbstractDatabaseMojo
                 });
 
                 if (databaseExists) {
-                    CONSOLE.info("Dropping Database %s...", database);
+                    CONSOLE.info("Dropping Database {}...", database);
 
                     if (!MigratoryOption.containsOption(MigratoryOption.DRY_RUN, optionList)) {
                         rootDbi.withHandle(new HandleCallback<Void>() {
@@ -96,11 +97,11 @@ public class DatabaseDropMojo extends AbstractDatabaseMojo
                     CONSOLE.info("... done");
                 }
                 else {
-                    CONSOLE.info("... Database %s does not exist ...", database);
+                    CONSOLE.info("... Database {} does not exist ...", database);
                 }
             }
             catch (DBIException de) {
-                CONSOLE.warnDebug(de, "While dropping %s", database);
+                CONSOLE.warn("While dropping {}", database, de);
             }
         }
     }

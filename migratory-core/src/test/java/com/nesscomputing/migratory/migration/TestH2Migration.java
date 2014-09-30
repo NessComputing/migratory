@@ -20,13 +20,11 @@ import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.IDBI;
 
 import com.nesscomputing.migratory.TestMigratory;
-import com.nesscomputing.testing.lessio.AllowLocalFileAccess;
 
 
 /**
  * Test to demonstrate the migration functionality using H2.
  */
-@AllowLocalFileAccess(paths="%TMP_DIR%")
 public class TestH2Migration extends AbstractMigrationTestCase
 {
     @Override
