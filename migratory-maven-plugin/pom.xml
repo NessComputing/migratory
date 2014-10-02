@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.nesscomputing.migratory</groupId>
     <artifactId>migratory-parent</artifactId>
-    <version>4.1.1-SNAPSHOT</version>
+    <version>4.2.1-SNAPSHOT</version>
   </parent>
 
   <groupId>com.nesscomputing.mojo</groupId>
