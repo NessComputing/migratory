@@ -17,8 +17,6 @@ package com.nesscomputing.migratory.jdbi;
 
 import java.net.URI;
 
-import org.joda.time.DateTime;
-
 public final class JdbiArguments
 {
     private JdbiArguments()
@@ -34,10 +32,4 @@ public final class JdbiArguments
     {
     	return new URIArgument(uri);
     }
-
-    public static DateTimeArgument forDateTime(final DateTime dateTime)
-    {
-    	return new DateTimeArgument(dateTime);
-    }
 }
-

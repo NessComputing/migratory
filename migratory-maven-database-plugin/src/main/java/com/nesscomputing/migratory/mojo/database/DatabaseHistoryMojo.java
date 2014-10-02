@@ -113,7 +113,7 @@ public class DatabaseHistoryMojo extends AbstractDatabaseMojo
                                        info.getState(),
                                        shortDir(info.getDirection()),
                                        info.getUser(),
-                                       DATE_FORMAT.print(info.getCreated())
+                                       info.getCreated()
                              ));
             }
         }

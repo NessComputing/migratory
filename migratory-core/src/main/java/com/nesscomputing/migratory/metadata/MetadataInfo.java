@@ -18,10 +18,10 @@ package com.nesscomputing.migratory.metadata;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.joda.time.DateTime;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.Update;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -74,7 +74,7 @@ public class MetadataInfo
     private final String user;
 
     /** Time of the Migration execution. */
-    private final DateTime created;
+    private final Date created;
 
     /** Primary key. */
     private final long metadataInfoId;
@@ -91,7 +91,7 @@ public class MetadataInfo
                         final String scriptName,
                         final String checksum,
                         final String user,
-                        final DateTime created,
+                        final Date created,
                         final long metadataInfoId)
     {
         this.startVersion = startVersion;
@@ -188,9 +188,9 @@ public class MetadataInfo
         return user;
     }
 
-    public DateTime getCreated()
+    public Date getCreated()
     {
-        return created;
+        return (Date) created.clone();
     }
 
     public long getMetadataInfoId()
@@ -233,7 +233,7 @@ public class MetadataInfo
                 r.getString("script_name"),
                 r.getString("checksum"),
                 r.getString("metadata_user"),
-                JdbiMappers.getDateTime(r, "metadata_created"),
+                r.getDate("metadata_created"),
                 r.getLong("metadata_id")
             );
         }

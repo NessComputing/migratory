@@ -18,24 +18,11 @@ package com.nesscomputing.migratory.jdbi;
 import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-
-import org.joda.time.DateTime;
 
 public final class JdbiMappers
 {
     private JdbiMappers()
     {
-    }
-
-    /**
-     * Returns a DateTime object representing the date or null if the input is null.
-     */
-    public static DateTime getDateTime(final ResultSet rs, final String columnName) throws SQLException
-    {
-        final Timestamp ts = rs.getTimestamp(columnName);
-
-        return (ts == null) ? null : new DateTime(ts);
     }
 
     /**

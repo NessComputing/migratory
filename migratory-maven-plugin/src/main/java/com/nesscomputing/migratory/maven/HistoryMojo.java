@@ -102,7 +102,7 @@ public class HistoryMojo extends AbstractMigratoryMojo
                          metadataInfo.getState(),
                          shortDir(metadataInfo.getDirection()),
                          metadataInfo.getUser(),
-                         DATE_FORMAT.print(metadataInfo.getCreated()),
+                         metadataInfo.getCreated(),
                          metadataInfo.getExecutionTime(),
                          metadataInfo.getDescription(),
                          metadataInfo.getScriptName()));
